@@ -4,9 +4,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - "welcome/src" 
+      - "welcome/src"
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
 
