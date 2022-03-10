@@ -16,7 +16,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - "${{ env.USECASE }}/src"
+      - "welcome/src"
   workflow_dispatch:
 
 jobs:
@@ -49,7 +49,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ${{ env.USECASE }}
+          context: welcome
           push: true
-          tags: 1646552/${{ env.USECASE }}:latest
+          tags: 1646552/welcome:latest
           labels: ${{ steps.meta.outputs.labels }}
