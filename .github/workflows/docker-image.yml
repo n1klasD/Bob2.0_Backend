@@ -1,0 +1,20 @@
+name: Welcome Dialog build
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "welcome/src" 
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build welcome --file Dockerfile --tag my-image-name:$(date +%s)
