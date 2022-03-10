@@ -5,18 +5,15 @@
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
-
-env:
-  USECASE: welcome
   
 
-name: Welcome Dialog test and build
+name: Entertainment test and build
 
 on:
   push:
     branches: [ main ]
     paths:
-      - "welcome/src"
+      - "entertainment/src"
   workflow_dispatch:
 
 jobs:
@@ -49,7 +46,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: welcome
+          context: entertainment
           push: true
-          tags: 1646552/welcome:latest
+          tags: 1646552/entertainment:latest
           labels: ${{ steps.meta.outputs.labels }}
