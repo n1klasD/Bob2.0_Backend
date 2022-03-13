@@ -1,4 +1,4 @@
-# Bob2.0_Backend
+# Bob 2.0 Backend Repository
 Backend for Personal Digital Assistant Bob 2.0
 
 ## Structure
