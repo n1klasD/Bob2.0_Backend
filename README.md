@@ -7,14 +7,14 @@ The backend is structured with a microservice architecture. Currently, each fold
 contains the code for one USECASE and docker container and therefore has an own dockerfile. The general structure is seen below.
 
 USECASE
-│    └───Dockerfile
-│
+│    └───Dockerfile                                                                                        
+│                                                                                        
 ├───src
-│    ├───  app.py
-│    └───  requirements.txt
+│    ├───  app.py                                                                                        
+│    └───  requirements.txt                                                                                        
 │
-└───tests
-     └───  test_sample.py
+└───tests                                                                                        
+     └───  test_sample.py                                                                                        
      
 Currently, each usecase consists of a flask application, which is a microframework for writing RESTful Apis in Python. The folder *src* contains the source code of the application. The *app.py* file is the entrypoint for the flask application. The files in the folder *tests* are evaluated using pytest. Their filename should start with *test_*. 
 
