@@ -9,10 +9,10 @@ contains the code for one USECASE and docker container and therefore has an own 
 USECASE                                                                                                                                                            
 │    └───Dockerfile                                                                                        
 │                                                                                        
-├───src
+├───src                                                                                       
 │    ├───  app.py                                                                                        
 │    └───  requirements.txt                                                                                        
-│
+│                                                                                                                          
 └───tests                                                                                        
      └───  test_sample.py                                                                                        
      
