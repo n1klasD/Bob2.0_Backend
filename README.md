@@ -6,7 +6,7 @@ Backend for Personal Digital Assistant Bob 2.0
 The backend is structured with a microservice architecture. Currently, each folder *controller*, *entertainment*, *finances*, *journey* and *welcome* 
 contains the code for one USECASE and docker container and therefore has an own dockerfile. The general structure is seen below.
 
-USECASE
+USECASE                                                                                                                                                            
 │    └───Dockerfile                                                                                        
 │                                                                                        
 ├───src
