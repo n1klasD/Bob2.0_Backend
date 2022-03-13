@@ -19,6 +19,8 @@ is automatically built using the dockerfile and pushed to it´s respective docke
 * [entertainment](https://hub.docker.com/repository/docker/1646552/entertainment)
 * [controller](https://hub.docker.com/repository/docker/1646552/controller)
 
+If anyone would like to use a different framework, programming languages or else he can just adjust the Dockerfiles and github actions.yml. 
+
 ## Results
 
 [![Controller test and build](https://github.com/n1klasD/Bob2.0_Backend/actions/workflows/controller_test_build.yml/badge.svg)](https://github.com/n1klasD/Bob2.0_Backend/actions/workflows/controller_test_build.yml)
