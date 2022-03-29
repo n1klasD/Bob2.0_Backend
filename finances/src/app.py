@@ -1,13 +1,15 @@
 from flask import Flask
 
 from finances.src import datasource
+import asyncio
 
 app = Flask(__name__)
 
 
 @app.route('/stocks')
 def stocks():
-    pass
+    portfolio = asyncio.run(datasource.get_tr_info())
+    return portfolio
 
 
 @app.route('/crypto')
