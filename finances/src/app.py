@@ -1,19 +1,43 @@
-from datetime import datetime
-
 from flask import Flask
 
-import datasource
+from finances.src import datasource
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello():
-    ticker = "ibm"
-    date = datetime.strptime("01.01.2022", "%d.%m.%Y")
-    # return f"{ticker}: {datasource.stock_price_on_date(ticker, date)}"
-    binance_info = datasource.get_binance_info()
-    return str(binance_info)
+@app.route('/stocks')
+def stocks():
+    pass
+
+
+@app.route('/crypto')
+def crypto():
+    balances = datasource.get_binance_info()
+    balances_not_null = []
+
+    for balance in balances:
+        if float(balance["free"]) != 0:
+            balances_not_null.append(f" {balance['asset']}:\t{balance['free']} \n")
+
+    if balances_not_null:
+        return "Deine Kryptos aktuell: " + "\n".join(balances_not_null)
+
+    return "Du hast aktuell keine Kryptos."
+
+
+@app.route('/all')
+def all_investments():
+    pass
+
+
+@app.route('/info/<ticker>')
+def dj(ticker):
+    try:
+        name, value, currency = datasource.ticker_info(ticker)
+        return f"{name} liegt aktuell bei {value:.2f} {currency}."
+    except Exception as e:
+        print(e)
+        return "Die Daten für dieses Kürzel konnten nicht abgerufen werden."
 
 
 if __name__ == "__main__":

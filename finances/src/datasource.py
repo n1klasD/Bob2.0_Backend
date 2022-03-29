@@ -1,23 +1,15 @@
-import datetime
-
 from binance import Client
-from yahoo_fin.stock_info import get_data
+from yahoo_fin.stock_info import get_quote_data
 
 
 def get_binance_info():
-    api_key = "fkmprqAUizmipqMw96xnBhCufMej0ti2c42I67Eda8lZWqFHnS23GxU7xabkvW1r"
+    api_key = "Yiux33U9VQCjdAr9R10HurLLasClPCyKFrKAAmghh7koEDE6XCvd6AWGQJl0D8pp"
     api_secret = ""  # TODO add key
     client = Client(api_key, api_secret)
-    info = client.get_all_tickers()
-    return info
+    info = client.get_account()
+    return info["balances"]
 
 
-def stock_price_on_date(ticker: str, date: datetime) -> float:
-    data = get_data(
-        ticker=ticker,
-        start_date=date,
-        end_date=date + datetime.timedelta(days=1),
-        interval="1d"
-    )
-
-    return data.Close
+def ticker_info(ticker: str) -> tuple[str, str, float]:
+    info = get_quote_data(ticker)
+    return info["shortName"], info["regularMarketPrice"], info["currency"]
