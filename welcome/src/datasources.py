@@ -4,9 +4,9 @@ import requests
 
 
 def get_rapla_data():
-    date ="today" 
+    date = "today"
     link = "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
-        
+
     if date == "today":
         now = datetime.datetime.now()
     elif date == "tomorrow":
@@ -16,7 +16,7 @@ def get_rapla_data():
         try:
             now = datetime.datetime.strptime(date, "%d.%m.%y")
         except:
-            
+
             return "Invalid Format"
 
     # add date as url params
@@ -30,18 +30,18 @@ def get_rapla_data():
 
     if weekday > 4:
         # saturday or sunday
-        
+
         return ("Free")
 
     # get html content and parse it with bs4
     webpage = requests.get(link)
     soup = BeautifulSoup(webpage.text, "html.parser")
-    
-    answer =  ""
+
+    answer = ""
 
     weekdays_german = ("Mo", "Di", "Mi", "Do", "Fr")
-    
-    week_blocks = soup.find_all("td", class_ = "week_block")
+
+    week_blocks = soup.find_all("td", class_="week_block")
     for week_block in week_blocks:
         # get all days plan in matching week and iterte until the right one is found
         info = week_block.a.get_text().split("\n")
@@ -50,10 +50,7 @@ def get_rapla_data():
             continue
         course = info[3]
         person = info[21]
-        
+
         answer += time[1] + ": " + course + " bei " + person[:-1] + "\n"
 
     return answer
-
-
-    return data.Close
