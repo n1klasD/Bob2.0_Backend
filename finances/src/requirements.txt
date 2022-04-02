@@ -1,1 +1,5 @@
 flask
+yahoo-fin
+python-binance
+pandas
+ecdsa

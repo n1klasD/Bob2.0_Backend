@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.9
 ADD ./src /app
 WORKDIR /app
 RUN pip install -r requirements.txt
