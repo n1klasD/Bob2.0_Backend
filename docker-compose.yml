@@ -3,7 +3,7 @@ services:
   controller:
     image: 1646552/controller:latest
     ports:
-    - "8000:80"
+    - "80:8000"
     depends_on:
       - welcome
     deploy:
