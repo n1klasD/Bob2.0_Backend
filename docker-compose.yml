@@ -3,25 +3,10 @@ services:
   controller:
     image: 1646552/controller:latest
     ports:
-      - target: 8000
-      - published: 80
-    networks:
-      internal:
+    - "8000:80"
     depends_on:
       - welcome
     deploy:
       restart_policy:
         condition: on-failure
         delay: 5s
-  welcome:
-    image: 1646552/welcome:latest
-    ports:
-      - "8001:8001"
-    networks:
-      internal:
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-networks:
-  internal:
