@@ -1,4 +1,3 @@
-version: "1"
 services:
   controller:
     image: 1646552/controller:latest
@@ -10,4 +9,3 @@ services:
     restart: always
 networks:
   internal:
-    name: communication-network
