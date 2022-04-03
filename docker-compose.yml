@@ -20,5 +20,5 @@ services:
     labels:
       - "traefik.enable=true"
       #- "traefik.http.routers.controller.rule=Host(`whoami.localhost`)"
-      #- "traefik.http.routers.controller.entrypoints=web"
+      - "traefik.http.routers.controller.entrypoints=web"
 
