@@ -3,7 +3,8 @@ services:
   controller:
     image: 1646552/controller:latest
     ports:
-      - "8000:8000"
+      - target: 8000
+      - published: 80
     networks:
       internal:
     depends_on:
