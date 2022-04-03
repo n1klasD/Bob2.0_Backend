@@ -6,4 +6,3 @@ services:
       - target: 8000
         published: 80
         mode: host
-        
