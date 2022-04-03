@@ -28,7 +28,6 @@ services:
       - "traefik.http.routers.controller.entrypoints=web"
       - "traefik.port=80"
     networks:
-      - internal
       - web
 networks:
   web:
