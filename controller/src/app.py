@@ -1,6 +1,6 @@
 import random
 
-import requests
+
 from flask import Flask, request, jsonify
 from SpeechParser import SpeechParser
 import config
@@ -8,10 +8,10 @@ import config
 app = Flask(__name__)
 
 
-def post_request(usecase_name, route, json_data):
-    port = usecase2port[usecase_name]
-    url = "http://127.0.0.1:" + str(port) + route
-    return requests.post(url, json=json_data)
+#def post_request(usecase_name, route, json_data):
+#    port = usecase2port[usecase_name]
+#    url = "http://127.0.0.1:" + str(port) + route
+#    return requests.post(url, json=json_data)
 
 
 usecase2port = {
