@@ -14,11 +14,25 @@ services:
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    depends_on:
+      - controller
+    networks:
+      - web
   controller:
     image: 1646552/controller:latest
     container_name: "controller"
+    ports:
+      - "8000:8000"
     labels:
       - "traefik.enable=true"
-      #- "traefik.http.routers.controller.rule=Host(`whoami.localhost`)"
       - "traefik.http.routers.controller.entrypoints=web"
+      - "traefik.port=80"
+    networks:
+      - internal
+      - web
+networks:
+  web:
+    external: true
+  internal:
+    external: false
 
