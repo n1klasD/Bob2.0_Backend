@@ -1,11 +1,14 @@
+version: "3"
 services:
   controller:
     image: 1646552/controller:latest
-    ports: 8000:80
+    ports:
+      - "8000:80"
     restart: always
   welcome:
     image: 1646552/welcome:latest
-    ports: 8001:8001
+    ports:
+      - "8001:8001"
     restart: always
 networks:
   internal:
