@@ -24,11 +24,14 @@ services:
     ports:
       - "8000:8000"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.controller.entrypoints=web"
-      - "traefik.port=80"
+        - traefik.enable=true
+        - traefik.http.routers.backend.entrypoints=web
+        - traefik.http.services.backend.loadbalancer.server.port=8000
+        - traefik.http.routers.controller.service=controller
+        - traefik.docker.network=web
     networks:
       - web
 networks:
   web:
+    driver: bridge
 
