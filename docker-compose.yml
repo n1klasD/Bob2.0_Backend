@@ -6,7 +6,4 @@ services:
       - target: 8000
         published: 80
         mode: host
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
+        
