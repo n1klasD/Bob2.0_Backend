@@ -3,11 +3,13 @@ from bs4 import BeautifulSoup
 import requests
 import json
 
+
 class WelcomeSource:
     def __init__(self):
         self.name = "test"
         self.rapla = "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
         self.city = "Stuttgart"
+
     def get_welcome_briefing(self):
         answer = ""
         return answer
@@ -31,7 +33,7 @@ class WelcomeSource:
     def get_weahter_data(self):
         url = "https://community-open-weather-map.p.rapidapi.com/climate/month"
 
-        querystring = {"q":self.city,"lat":"0","lon":"0","lang":"de","units":"metric"}
+        querystring = {"q": self.city, "lat": "0", "lon": "0", "lang": "de", "units": "metric"}
 
         headers = {
             "X-RapidAPI-Host": "community-open-weather-map.p.rapidapi.com",
@@ -40,7 +42,8 @@ class WelcomeSource:
 
         response = requests.request("GET", url, headers=headers, params=querystring)
         text = json.loads(response.text)
-        return f"Heute wird es im Durchschnitt {str(text['list'][0]['temp']['average'])} Grad"
+        # return f"Heute wird es im Durchschnitt {str(text['list'][0]['temp']['average'])} Grad"
+        return f"Heute wird es im Durchschnitt {str(text)} Grad"
 
     def get_rapla_data(self):
         date = "today"
@@ -91,7 +94,7 @@ class WelcomeSource:
             person = ""
             if "Personen:" in info:
                 person += " bei " + info[info.index("Personen:") + 1]
-           
+
             answer += time[1] + ": " + course + person[:-1] + "\n"
 
         return answer
