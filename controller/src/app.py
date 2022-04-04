@@ -3,18 +3,23 @@ import random
 import requests
 from flask import Flask, request, jsonify
 from SpeechParser import SpeechParser
-from ...config import usecase2port, is_production
+# from ...config import usecase2port, is_production
 import config
 
 app = Flask(__name__)
 
+usecase2port = {
+    "controller": 8000,
+    "welcome": 8001,
+    "entertainment": 8002,
+    "finances": 8003,
+    "journey": 8004
+}
+
 
 def post_request(usecase_name, route, json_data):
     port = usecase2port[usecase_name]
-    if is_production:
-        url = "http://" + usecase_name + ":" + str(port) + route
-    else:
-        url = "http://127.0.0.1:" + str(port) + route
+    url = "http://" + usecase_name + ":" + str(port) + route
     return requests.post(url, json=json_data)
 
 
@@ -33,12 +38,14 @@ def process_text():
         # todo: Error handling
         tts = usecase_response.text
         further_questions = question.get_further_questions(4)
+        usecase = question.get_usecase_name(),
     else:
         tts = random.choice(config.no_answer)
         further_questions = []
+        usecase = "None"
 
     response = {
-        "use_case": question.get_usecase_name(),
+        "use_case": usecase,
         "tts": tts,
         "further_questions": further_questions
     }

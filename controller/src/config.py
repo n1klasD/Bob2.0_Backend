@@ -26,7 +26,7 @@ usecases = [
             ),
             Question(
                 route="/stundenplan",
-                keywords=["stundenplan", "rapla", "vorlesungen"],
+                keywords=["stundenplan", "rapla", "vorlesungen", "vorlesung"],
                 example_questions=["Wann habe ich heute Vorlesung?", "Was steht im Stundenplan?"]
             )
         ]

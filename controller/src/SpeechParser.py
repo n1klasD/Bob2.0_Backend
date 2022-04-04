@@ -33,7 +33,7 @@ class SpeechParser:
 
 
 if __name__ == "__main__":
-    speech = "Gib mir ein briefing"
+    speech = "vorlesung"
     route = SpeechParser.speech2route(speech)
     if route:
         # Call further routes
