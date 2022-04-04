@@ -7,6 +7,8 @@ services:
       - "80:8000"
     networks:
       - internal
+    depends_on:
+      - welcome
   welcome:
     image: 1646552/welcome:latest
     container_name: "welcome"

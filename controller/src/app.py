@@ -3,6 +3,7 @@ import random
 import requests
 from flask import Flask, request, jsonify
 from SpeechParser import SpeechParser
+from ...config import usecase2port, is_production
 import config
 
 app = Flask(__name__)
@@ -10,17 +11,11 @@ app = Flask(__name__)
 
 def post_request(usecase_name, route, json_data):
     port = usecase2port[usecase_name]
-    url = "http://" + usecase_name + ":" + str(port) + route
+    if is_production:
+        url = "http://" + usecase_name + ":" + str(port) + route
+    else:
+        url = "http://127.0.0.1:" + str(port) + route
     return requests.post(url, json=json_data)
-
-
-usecase2port = {
-    "controller": 8000,
-    "welcome": 8001,
-    "entertainment": 8002,
-    "finances": 8003,
-    "journey": 8004
-}
 
 
 @app.route('/input', methods=['POST'])
@@ -43,7 +38,7 @@ def process_text():
         further_questions = []
 
     response = {
-        "usecase": question.get_usecase_name(),
+        "use_case": question.get_usecase_name(),
         "tts": tts,
         "further_questions": further_questions
     }
