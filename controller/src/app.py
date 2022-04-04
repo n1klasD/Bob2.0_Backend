@@ -38,12 +38,14 @@ def process_text():
         # todo: Error handling
         tts = usecase_response.text
         further_questions = question.get_further_questions(4)
+        usecase = question.get_usecase_name(),
     else:
         tts = random.choice(config.no_answer)
         further_questions = []
+        usecase = "None"
 
     response = {
-        "use_case": question.get_usecase_name(),
+        "use_case": usecase,
         "tts": tts,
         "further_questions": further_questions
     }
