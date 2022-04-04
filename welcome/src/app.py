@@ -11,13 +11,16 @@ def index():
 
 @app.route('/welcome', methods=["POST"])
 def briefing():
-    userName = "Max Mustermann"
-    return f"Guten Morgen {userName}. Heute steht ein schöner Tag bevor. Dein erster Termin ist um ..., gefolgt von ... danach eine Pause bis ..., danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: _motivational quotes API_."
+    userName = "Simon"
+    sources = datasources.WelcomeSource()
+    return f"Guten Morgen {userName}. {sources.get_weahter_data()} Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: {sources.get_motivational_quote()}."
 
 
 @app.route('/wetter', methods=["POST"])
 def weather():
-    return "heute ist ein schoener Tag."
+    sources = datasources.WelcomeSource()
+    weather = sources.get_weahter_data()
+    return weather
 
 
 @app.route('/todo', methods=["POST"])
