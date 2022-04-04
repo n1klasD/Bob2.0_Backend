@@ -11,7 +11,9 @@ services:
     image: 1646552/welcome:latest
     container_name: "welcome"
     ports:
-      - "8001"
+      - "8001:8001"
+    networks:
+      - internal
 networks:
   internal:
 
