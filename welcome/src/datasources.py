@@ -1,12 +1,47 @@
 import datetime
 from bs4 import BeautifulSoup
 import requests
+import json
 
 class WelcomeSource:
     def __init__(self):
         self.name = "test"
         self.rapla = "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
-   
+        self.city = "Stuttgart"
+    def get_welcome_briefing(self):
+        answer = ""
+        return answer
+
+    def get_motivational_quote(self):
+        url = "https://motivational-quotes1.p.rapidapi.com/motivation"
+
+        payload = {
+            "key1": "value",
+            "key2": "value"
+        }
+        headers = {
+            "content-type": "application/json",
+            "X-RapidAPI-Host": "motivational-quotes1.p.rapidapi.com",
+            "X-RapidAPI-Key": "7489d1be68mshccc0e34a5ecd571p150b3cjsn9b9940bc96dd"
+        }
+
+        response = requests.request("POST", url, json=payload, headers=headers)
+        return response.text
+
+    def get_weahter_data(self):
+        url = "https://community-open-weather-map.p.rapidapi.com/climate/month"
+
+        querystring = {"q":self.city,"lat":"0","lon":"0","lang":"de","units":"metric"}
+
+        headers = {
+            "X-RapidAPI-Host": "community-open-weather-map.p.rapidapi.com",
+            "X-RapidAPI-Key": "7489d1be68mshccc0e34a5ecd571p150b3cjsn9b9940bc96dd"
+        }
+
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        text = json.loads(response.text)
+        return f"Heute wird es im Durchschnitt {str(text['list'][0]['temp']['average'])} Grad"
+
     def get_rapla_data(self):
         date = "today"
         link = self.rapla
