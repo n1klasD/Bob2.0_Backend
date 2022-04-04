@@ -1,37 +1,9 @@
 version: "3.3"
 services:
-  traefik:
-    image: "traefik:v2.6"
-    container_name: "traefik"
-    command:
-      #- "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    depends_on:
-      - controller
-    networks:
-      - web
   controller:
     image: 1646552/controller:latest
     container_name: "controller"
     ports:
-      - "8000:8000"
-    labels:
-        - traefik.enable=true
-        - traefik.http.routers.backend.entrypoints=web
-        - traefik.http.services.backend.loadbalancer.server.port=8000
-        - traefik.http.routers.controller.service=controller
-        - traefik.docker.network=web
-    networks:
-      - web
-networks:
-  web:
-    driver: bridge
+      - "80:8000"
+
 
