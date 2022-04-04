@@ -5,5 +5,14 @@ services:
     container_name: "controller"
     ports:
       - "80:8000"
+    networks:
+      - internal
+  welcome:
+    image: 1646552/welcome:latest
+    container_name: "welcome"
+    ports:
+      - "8001"
+networks:
+  internal:
 
 
