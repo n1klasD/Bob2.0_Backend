@@ -30,16 +30,21 @@ def process_text():
     preferences = data["preferences"]
 
     question = SpeechParser.speech2route(speech_text)
-    if question:
-        # Call the matched usecase, and pass the preferences along
-        usecase_response = post_request(question.get_usecase_name(),
-                                        question.get_route(),
-                                        preferences)
-        # todo: Error handling
-        tts = usecase_response.text
-        further_questions = question.get_further_questions(4)
-        usecase = question.get_usecase_name(),
-    else:
+    try:
+        if question:
+            # Call the matched usecase, and pass the preferences along
+            usecase_response = post_request(question.get_usecase_name(),
+                                            question.get_route(),
+                                            preferences)
+            # todo: Error handling
+            tts = usecase_response.text
+            further_questions = question.get_further_questions(4)
+            usecase = question.get_usecase_name(),
+        else:
+            tts = random.choice(config.no_answer)
+            further_questions = []
+            usecase = "None"
+    except Exception as e:
         tts = random.choice(config.no_answer)
         further_questions = []
         usecase = "None"
