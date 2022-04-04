@@ -1,3 +1,4 @@
+import json
 import random
 
 import requests
@@ -20,6 +21,7 @@ usecase2port = {
 def post_request(usecase_name, route, json_data):
     port = usecase2port[usecase_name]
     url = "http://" + usecase_name + ":" + str(port) + route
+    # url = "http://localhost:" + str(port) + route
     return requests.post(url, json=json_data)
 
 
@@ -30,21 +32,16 @@ def process_text():
     preferences = data["preferences"]
 
     question = SpeechParser.speech2route(speech_text)
-    try:
-        if question:
-            # Call the matched usecase, and pass the preferences along
-            usecase_response = post_request(question.get_usecase_name(),
-                                            question.get_route(),
-                                            preferences)
-            # todo: Error handling
-            tts = usecase_response.text
-            further_questions = question.get_further_questions(4)
-            usecase = question.get_usecase_name(),
-        else:
-            tts = random.choice(config.no_answer)
-            further_questions = []
-            usecase = "None"
-    except Exception as e:
+    if question:
+        # Call the matched usecase, and pass the preferences along
+        usecase_response = post_request(question.get_usecase_name(),
+                                        question.get_route(),
+                                        preferences)
+        # todo: Error handling
+        tts = usecase_response.text
+        further_questions = question.get_further_questions(4)
+        usecase = question.get_usecase_name(),
+    else:
         tts = random.choice(config.no_answer)
         further_questions = []
         usecase = "None"

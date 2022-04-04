@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, request
 import datasources
+
 
 app = Flask(__name__)
 
@@ -11,6 +12,8 @@ def index():
 
 @app.route('/welcome', methods=["POST"])
 def briefing():
+    data = request.get_json()
+    print(data)
     userName = "Simon"
     sources = datasources.WelcomeSource()
     return f"Guten Morgen {userName}. {sources.get_weahter_data()} Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: {sources.get_motivational_quote()}."
