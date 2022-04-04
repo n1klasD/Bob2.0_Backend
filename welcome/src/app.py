@@ -32,9 +32,11 @@ def calendar():
 
 @app.route('/stundenplan', methods=["POST"])
 def timetable():
-    answer = datasources.get_rapla_data()
+    source = datasources.WelcomeSource()
+    answer = source.get_rapla_data()
     return answer
 
 
 if __name__ == "__main__":
+    
     app.run(host="0.0.0.0", port=8001, debug=True)
