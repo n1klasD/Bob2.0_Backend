@@ -1,28 +1,42 @@
-import random
 
-from config import usecases, no_answer
+from typing import List
+
+
+from controller.src.ControllerDefinitions import Usecase
 
 
 class SpeechParser:
-    usecases = usecases
+    def __init__(self, usecase: List[Usecase]):
+        self._usecases = usecase
 
-    @staticmethod
-    def speech2route(speech_text):
+    def speech2route(self, speech_text):
+        """
+        Assign a route based on keywords in speech_text
+
+        :param speech_text:
+        :return: Question | None
+        """
+
         # return the first match of keywords
         speech_text = speech_text.lower()
 
-        for usecase in usecases:
+        for usecase in self._usecases:
             for question in usecase.get_questions():
                 if question.match_keywords(speech_text):
                     return question
         else:
             return None
 
-    @staticmethod
-    def has_overlapping_keywords():
+    def has_overlapping_keywords(self):
+        """
+        Check, if the usecases have overlapping keywords
+
+        :return: bool
+        """
+
         keywords = []
         # check if there are overlapping keywords
-        for usecase in usecases:
+        for usecase in self._usecases:
             for question in usecase.get_questions():
                 for keyword in question.get_keywords():
                     if keyword in keywords:
@@ -30,14 +44,3 @@ class SpeechParser:
                     else:
                         keywords.append(keyword)
         return False
-
-
-if __name__ == "__main__":
-    speech = "vorlesung"
-    route = SpeechParser.speech2route(speech)
-    if route:
-        # Call further routes
-        print(route)
-    else:
-        answer = random.choice(no_answer)
-        print(answer)

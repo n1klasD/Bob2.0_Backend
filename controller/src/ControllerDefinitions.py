@@ -23,7 +23,7 @@ class Question:
             # select a random question from each question object in the parent usecase, that is not myself
             further_questions = [random.choice(question.get_example_questions())
                                  for question in questions if question != self]
-            if len(further_questions) < n:
+            if len(further_questions) > n:
                 return random.choices(further_questions, k=n)
             else:
                 return further_questions

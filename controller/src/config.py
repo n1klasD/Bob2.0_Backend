@@ -1,4 +1,7 @@
-from ControllerDefinitions import Usecase, Question
+from controller.src.ControllerDefinitions import Usecase, Question
+
+# configuration of Usecases and questions. This determines, which usecase should handle the request depending on
+# the keywords
 
 usecases = [
     Usecase(
