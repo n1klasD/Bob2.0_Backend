@@ -20,6 +20,7 @@ def test_favourites():
 def test_leading():
     assert app.leading() is not None
 
+
 def test_wallstreetbets():
     assert app.wallstreetbets() is not None
 
