@@ -2,7 +2,7 @@ import random
 
 import requests
 from flask import Flask, request, jsonify
-from SpeechParser import SpeechParser
+from controller.src.SpeechParser import SpeechParser
 import config as config
 
 app = Flask(__name__)
