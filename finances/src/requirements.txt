@@ -2,4 +2,5 @@ flask
 yahoo-fin
 python-binance
 pandas
-ecdsa
+requests
+beautifulsoup4
