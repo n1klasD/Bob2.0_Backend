@@ -2,8 +2,8 @@ import random
 
 import requests
 from flask import Flask, request, jsonify
-from controller.src.SpeechParser import SpeechParser
-import controller.src.config as config
+from .SpeechParser import SpeechParser
+from .config import *
 
 app = Flask(__name__)
 
@@ -35,7 +35,7 @@ def post_request(usecase_name, route, json_data):
 
 def process_logic(speech_text, preferences):
     # create a speech parser with the usecase definition from config
-    speech_parser = SpeechParser(usecase=config.usecases)
+    speech_parser = SpeechParser(usecase=usecases)
 
     # select a route that corresponds to the keywords
     question = speech_parser.speech2route(speech_text)
@@ -49,7 +49,7 @@ def process_logic(speech_text, preferences):
         usecase = question.get_usecase_name(),
     else:
         # select a random answer string
-        tts = random.choice(config.no_answer)
+        tts = random.choice(no_answer)
         further_questions = []
         usecase = "None"
 
