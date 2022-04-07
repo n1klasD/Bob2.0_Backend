@@ -1,20 +1,13 @@
-from flask import Flask
+from flask import Flask, request
 
-from finances.src import datasource
-import asyncio
+from finances.src import datasource, config
 
 app = Flask(__name__)
 
 
-@app.route('/stocks')
-def stocks():
-    portfolio = asyncio.run(datasource.get_tr_info())
-    return portfolio
-
-
-@app.route('/crypto')
+@app.route("/crypto")
 def crypto():
-    balances = datasource.get_binance_info()
+    balances = datasource.get_binance_info(configuration.binance_key_public, configuration.binance_key_private)
     balances_not_null = []
 
     for balance in balances:
@@ -24,23 +17,66 @@ def crypto():
     if balances_not_null:
         return "Deine Kryptos aktuell: " + "\n".join(balances_not_null)
 
-    return "Du hast aktuell keine Kryptos."
+    return "Du hast aktuell keine Kryptos.\n"
 
 
-@app.route('/all')
-def all_investments():
-    pass
+@app.route("/favourites")
+def favourites():
+    answer = "Deine Favoriten: \n"
+    for ticker in configuration.fav_stocks:
+        answer += ticker_info(ticker)
+
+    return answer
 
 
-@app.route('/info/<ticker>')
-def dj(ticker):
+@app.route("/leading")
+def leading():
+    answer = "Dein favorisierter Leitindex: \n"
+    answer += ticker_info(configuration.fav_leading_index)
+    return answer
+
+
+@app.route("/settings", methods=['POST'])
+def settings():
+    data = request.get_json()
+    configuration.binance_key_private = data["binance_key_private"]
+    configuration.binance_key_public = data["binance_key_public"]
+    configuration.fav_stocks = data["fav_stocks"]
+    configuration.fav_leading_index = data["fav_leading_index"]
+
+
+@app.route("/wallstreetbets")
+def wallstreetbets():
+    most_discussed = datasource.get_most_discussed_stock()
+    name, value, currency = datasource.get_ticker_info(most_discussed["ticker"])
+
+    return f"Auf r/wallstreetbets wird heute {name} mit {most_discussed['no_of_comments']} Kommentaren als {most_discussed['sentiment']} angesehen. " \
+           f"Der aktuelle Wert liegt bei  {value} {currency}. \n"
+
+
+@app.route("/nft")
+def nft():
+    name, collection, hours_ago, value = datasource.get_top_nft()
+
+    return f"{name} aus der Kollektion {collection} wurde vor {hours_ago} Stunden für {value} verkauft.\n"
+
+
+@app.route("/info/<ticker>")
+def ticker_info(ticker):
     try:
-        name, value, currency = datasource.ticker_info(ticker)
-        return f"{name} liegt aktuell bei {value:.2f} {currency}."
+        name, value, currency = datasource.get_ticker_info(ticker)
+        return f"{name} liegt aktuell bei {value:.2f} {currency}. \n"
     except Exception as e:
         print(e)
         return "Die Daten für dieses Kürzel konnten nicht abgerufen werden."
 
 
 if __name__ == "__main__":
+    configuration = config.Configuration(
+        binance_key_public="Yiux33U9VQCjdAr9R10HurLLasClPCyKFrKAAmghh7koEDE6XCvd6AWGQJl0D8pp",
+        binance_key_private="ejpcwWp7vXTJ8XGb8GGtlg7Kukz2z8wmtzPMqtdSXRAnhddAYqLykhkmPnGrGKGG",
+        fav_stocks=["ibm", "hpe", "btc-usd"],
+        fav_leading_index="^gdaxi"
+    )
+
     app.run(host="0.0.0.0", port=8000, debug=True)
