@@ -32,7 +32,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pytest
-          if [ -f finance/requirements.txt ]; then pip install -r finance/requirements.txt; fi
+          if [ -f finances/requirements.txt ]; then pip install -r finances/requirements.txt; fi
       - name: Run tests
         run: |
           pytest finances/tests
