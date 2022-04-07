@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest mock
+          pip install pytest
           if [ -f controller/requirements.txt ]; then pip install -r controller/requirements.txt; fi
       - name: Run tests
         run: |
