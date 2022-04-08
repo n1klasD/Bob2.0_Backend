@@ -4,3 +4,4 @@ python-binance
 pandas
 requests
 beautifulsoup4
+mock
