@@ -15,7 +15,7 @@ def crypto():
             balances_not_null.append(f" {balance['asset']}:\t{balance['free']} \n")
 
     if balances_not_null:
-        return "Deine Kryptos aktuell: " + "\n".join(balances_not_null)
+        return "Deine Kryptos aktuell:\n" + "\n".join(balances_not_null)
 
     return "Du hast aktuell keine Kryptos.\n"
 
@@ -47,18 +47,25 @@ def settings():
 
 @app.route("/wallstreetbets")
 def wallstreetbets():
-    most_discussed = datasource.get_most_discussed_stock()
-    name, value, currency = datasource.get_ticker_info(most_discussed["ticker"])
+    try:
+        most_discussed = datasource.get_most_discussed_stock()
+        name, value, currency = datasource.get_ticker_info(most_discussed["ticker"])
 
-    return f"Auf r/wallstreetbets wird heute {name} mit {most_discussed['no_of_comments']} Kommentaren als {most_discussed['sentiment']} angesehen. " \
-           f"Der aktuelle Wert liegt bei  {value} {currency}. \n"
+        return f"Auf r/wallstreetbets wird heute {name} mit {most_discussed['no_of_comments']} Kommentaren als {most_discussed['sentiment']} angesehen. " \
+               f"Der aktuelle Wert liegt bei  {value} {currency}. \n"
+    except Exception as e:
+        print(e)
+        return "Wallstreetbets kann gerade nicht abgerufen werden"
 
 
 @app.route("/nft")
 def nft():
-    name, collection, hours_ago, value = datasource.get_top_nft()
-
-    return f"{name} aus der Kollektion {collection} wurde vor {hours_ago} Stunden für {value} verkauft.\n"
+    try:
+        name, collection, hours_ago, value = datasource.get_top_nft()
+        return f"{name} aus der Kollektion {collection} wurde vor {hours_ago} Stunden für {value} verkauft.\n"
+    except Exception as e:
+        print(e)
+        return "NFT Informationen können gerade nicht abgerufen werden.\n"
 
 
 @app.route("/info/<ticker>")
@@ -68,7 +75,7 @@ def ticker_info(ticker):
         return f"{name} liegt aktuell bei {value:.2f} {currency}. \n"
     except Exception as e:
         print(e)
-        return "Die Daten für dieses Kürzel konnten nicht abgerufen werden."
+        return "Die Daten für dieses Kürzel konnten nicht abgerufen werden.\n"
 
 
 if __name__ == "__main__":
