@@ -38,8 +38,20 @@ def get_weahter_data(city):
 
     response = requests.request("GET", url, headers=headers, params=querystring)
     text = json.loads(response.text)
+    today = text['list'][0]
+    if today['humidity'] > 50:
+        humidity = 'niedriger'
+    else:
+        humidity = 'hoher'
+        
+    if today['temp']['average'] < 16:
+        clothing ="Du solltest dir eine Jacke anziehen."
+    elif today['temp']['average'] < 22:
+        clothing ="Du solltest dir noch einen Pulli mitnehmen."
+    else:
+        clothing = "Heute reicht ein T-Shirt."
     # return f"Heute wird es im Durchschnitt {str(text['list'][0]['temp']['average'])} Grad"
-    return f"Heute wird es im Durchschnitt {str(text)} Grad"
+    return f"Heute wird es in {str(text['city']['name'])} im Durchschnitt {str(today['temp']['average'])} Grad mit {humidity} Luftfeuchtigkeit. {clothing}"
 
 def get_rapla_data(key):
     rapla = "https://rapla.dhbw-stuttgart.de/rapla?key="
@@ -70,7 +82,7 @@ def get_rapla_data(key):
     if weekday > 4:
         # saturday or sunday
 
-        return ("Free")
+        return ("Heute hast du keine Vorlesungen.")
 
     # get html content and parse it with bs4
     webpage = requests.get(link)
