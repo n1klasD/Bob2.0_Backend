@@ -12,8 +12,8 @@ def index():
 
 @app.route('/welcome', methods=["POST"])
 def briefing():
-    data = request.args.get('data')
-    data = json.loads(data)
+    data = request.get_json()
+    
     
     sources = datasources.WelcomeSource()
     return f"Guten Morgen {data['username']}. {datasources.get_weahter_data('Stuttgart')} Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: {sources.get_motivational_quote()}."
@@ -21,32 +21,30 @@ def briefing():
 
 @app.route('/wetter', methods=["POST"])
 def weather():
-    data = request.args.get('data')
-    weather_data = json.loads(data)
-    weather = datasources.get_weahter_data(weather_data['city'])
+    data = request.get_json()
+    
+    weather = datasources.get_weahter_data(data['city'])
     return weather
 
 
 @app.route('/todo', methods=["POST"])
 def todo():
-    data = request.args.get('data')
-    data = json.loads(data)
+    data = request.get_json()
+    
     
     return "Heute hast du keine Termine."
 
 
 @app.route('/termine', methods=["POST"])
 def calendar():
-    data = request.args.get('data')
-    data = json.loads(data)
+    data = request.get_json()
     
     return "Heute hast du keine Termine."
 
 
 @app.route('/stundenplan', methods=["POST"])
 def timetable():
-    data = request.args.get('data')
-    data = json.loads(data)
+    data = request.get_json()
     answer = datasources.get_rapla_data("txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV")
     return answer
 
