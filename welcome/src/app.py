@@ -1,6 +1,6 @@
 from flask import Flask, request
 import datasources
-
+import json
 
 app = Flask(__name__)
 
@@ -12,37 +12,42 @@ def index():
 
 @app.route('/welcome', methods=["POST"])
 def briefing():
-    data = request.get_json()
-    userName = "Simon"
+    data = request.args.get('data')
+    data = json.loads(data)
+    
     sources = datasources.WelcomeSource()
-    return f"Guten Morgen {userName}. {sources.get_weahter_data()} Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: {sources.get_motivational_quote()}."
+    return f"Guten Morgen {data['username']}. {datasources.get_weahter_data('Stuttgart')} Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: {sources.get_motivational_quote()}."
 
 
 @app.route('/wetter', methods=["POST"])
 def weather():
-    data = request.get_json()
-    sources = datasources.WelcomeSource()
-    weather = sources.get_weahter_data()
+    data = request.args.get('data')
+    weather_data = json.loads(data)
+    weather = datasources.get_weahter_data(weather_data['city'])
     return weather
 
 
 @app.route('/todo', methods=["POST"])
 def todo():
-    data = request.get_json()
+    data = request.args.get('data')
+    data = json.loads(data)
+    
     return "Heute hast du keine Termine."
 
 
 @app.route('/termine', methods=["POST"])
 def calendar():
-    data = request.get_json()
+    data = request.args.get('data')
+    data = json.loads(data)
+    
     return "Heute hast du keine Termine."
 
 
 @app.route('/stundenplan', methods=["POST"])
 def timetable():
-    data = request.get_json()
-    source = datasources.WelcomeSource()
-    answer = source.get_rapla_data()
+    data = request.args.get('data')
+    data = json.loads(data)
+    answer = datasources.get_rapla_data("txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV")
     return answer
 
 
