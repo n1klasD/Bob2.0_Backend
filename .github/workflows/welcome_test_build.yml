@@ -34,9 +34,12 @@ jobs:
           pip install pytest
           if [ -f welcome/src/requirements.txt ]; then pip install -r welcome/src/requirements.txt; fi
       - name: Inject environment file
-        run: |
-          touch welcome/src/.env
-          echo "RAPID_KEY=${{ secrets.RAPID_KEY}}$" > welcome/src/.env
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_RAPID_KEY: ${{ secrets.RAPID_API}}
+          directory: welcome/src
+          file_name: .env
+          fail_on_empty: false
       - name: Run tests
         run: |
           pytest welcome/tests
