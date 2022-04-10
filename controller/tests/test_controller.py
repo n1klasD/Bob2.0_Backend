@@ -34,6 +34,7 @@ def test_input_request(client):
     with patch("requests.post") as patched_post:
         response = requests.Response()
         response._content = "Mock tts".encode("utf-8")
+        response.status_code = requests.status_codes.codes.CREATED
         patched_post.return_value = response
 
         # send request to test client
@@ -46,7 +47,7 @@ def test_input_request(client):
             }
         })
 
-        assert response.json["tts"] == "Mock tts" and response.status_code == 200
+        assert response.json["tts"] == "Mock tts"
 
 
 # Test the processing logic
@@ -55,6 +56,7 @@ def test_process_logic():
     with patch("requests.post") as patched_post:
         response = requests.Response()
         response._content = "Mock tts".encode("utf-8")
+        response.status_code = requests.status_codes.codes.CREATED
         patched_post.return_value = response
 
         json_response = process_logic("Briefing", {"p1": 0})
