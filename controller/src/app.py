@@ -28,8 +28,8 @@ def post_request(usecase_name, route, json_data):
     }
 
     port = usecase2port[usecase_name]
-    url = "http://" + usecase_name + ":" + str(port) + route
-    # url = "http://localhost:" + str(port) + route
+    # url = "http://" + usecase_name + ":" + str(port) + route
+    url = "http://localhost:" + str(port) + route
     return requests.post(url, json=json_data)
 
 
@@ -65,7 +65,7 @@ def process_logic(speech_text, preferences):
         "tts": tts,
         "further_questions": further_questions
     }
-    return jsonify(response), 200
+    return response, 200
 
 
 @app.route('/input', methods=['POST'])
