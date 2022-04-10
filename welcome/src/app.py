@@ -18,15 +18,15 @@ def briefing():
     data = request.get_json()
 
     return f"Guten Morgen {data[userName]}. \
-        {datasources.get_weahter_data(data['weatherLocation'])} \
-        Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: {datasources.get_motivational_quote()}."
+        {datasources.get_weahter_data(data[city])} \
+        Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: {datasources.get_news(data[news])}. Und vergiss nicht: {datasources.get_motivational_quote()}."
 
 
 @app.route('/wetter', methods=["POST"])
 def weather():
     data = request.get_json()
 
-    weather = datasources.get_weahter_data(data[city])
+    weather = datasources.get_weahter_data(data['city'])
     return weather
 
 

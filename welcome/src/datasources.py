@@ -2,16 +2,41 @@ import datetime
 from bs4 import BeautifulSoup
 import requests
 import json
+import os
+from dotenv import load_dotenv
+
+def get_API_Key():
+    BASEDIR = os.path.abspath(os.path.dirname(__file__))
+
+    load_dotenv(os.path.join(BASEDIR, '.env'))
+
+    return os.getenv("RAPID_KEY")
 
 
 def get_welcome_briefing():
     answer = ""
     return answer
 
+def get_news(category):
+
+    url = "https://free-news.p.rapidapi.com/v1/search"
+    if(category is None):
+        category = "News"
+    querystring = {"q":category,"lang":"de"}
+
+    headers = {
+        'x-rapidapi-host': "free-news.p.rapidapi.com",
+        'x-rapidapi-key': get_API_Key()
+        }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    text = json.loads(response.text)
+    return(text['articles'][0]['title'])
 
 def get_motivational_quote():
+    
     url = "https://motivational-quotes1.p.rapidapi.com/motivation"
-
+    
     payload = {
         "key1": "value",
         "key2": "value"
@@ -19,7 +44,7 @@ def get_motivational_quote():
     headers = {
         "content-type": "application/json",
         "X-RapidAPI-Host": "motivational-quotes1.p.rapidapi.com",
-        "X-RapidAPI-Key": "7489d1be68mshccc0e34a5ecd571p150b3cjsn9b9940bc96dd"
+        "X-RapidAPI-Key": get_API_Key()
     }
 
     response = requests.request("POST", url, json=payload, headers=headers)
@@ -27,13 +52,14 @@ def get_motivational_quote():
 
 
 def get_weahter_data(city):
+
     url = "https://community-open-weather-map.p.rapidapi.com/climate/month"
 
     querystring = {"q": city, "lat": "0", "lon": "0", "lang": "de", "units": "metric"}
 
     headers = {
         "X-RapidAPI-Host": "community-open-weather-map.p.rapidapi.com",
-        "X-RapidAPI-Key": "7489d1be68mshccc0e34a5ecd571p150b3cjsn9b9940bc96dd"
+        "X-RapidAPI-Key": get_API_Key()
     }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
@@ -112,3 +138,11 @@ def get_rapla_data(key):
         answer += time[1] + ": " + course + person[:-1] + "\n"
 
     return answer
+
+def get_todos():
+    BASEDIR = os.path.abspath(os.path.dirname(__file__))
+
+    load_dotenv(os.path.join(BASEDIR, '.env'))
+
+    key = os.getenv("TODO")
+
