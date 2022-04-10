@@ -65,7 +65,7 @@ def process_logic(speech_text, preferences):
         "tts": tts,
         "further_questions": further_questions
     }
-    return response, 200
+    return response
 
 
 @app.route('/input', methods=['POST'])
