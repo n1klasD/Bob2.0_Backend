@@ -26,7 +26,7 @@ def briefing():
 def weather():
     data = request.get_json()
 
-    weather = datasources.get_weahter_data(data['city'])
+    weather = datasources.get_weahter_data(data[city])
     return weather
 
 
