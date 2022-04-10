@@ -35,8 +35,7 @@ jobs:
           if [ -f welcome/src/requirements.txt ]; then pip install -r welcome/src/requirements.txt; fi
       - name: Inject environment file
         run: |
-          cd welcome/src/
-          touch .env
+          touch welcome/src/.env
           echo "RAPID_KEY=${{ secrets.RAPID_KEY}}$" > .env
       - name: Run tests
         run: |
