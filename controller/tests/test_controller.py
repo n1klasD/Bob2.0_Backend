@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-from controller.src.app import post_request, app as flask_app, process_logic
+from ..src.app import post_request, app as flask_app, process_logic
 from mock import patch
 
 
