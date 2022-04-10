@@ -33,10 +33,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
           if [ -f welcome/src/requirements.txt ]; then pip install -r welcome/src/requirements.txt; fi
+      - name: Inject environment file
+        run: |
+          cd welcome/src/
+          touch .env
+          echo "RAPID_KEY=${{ secrets.RAPID_KEY}}$" > .env
       - name: Run tests
         run: |
           pytest welcome/tests
-      
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
