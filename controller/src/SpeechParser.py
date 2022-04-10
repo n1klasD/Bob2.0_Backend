@@ -2,7 +2,7 @@
 from typing import List
 
 
-from controller.src.ControllerDefinitions import Usecase
+from .ControllerDefinitions import Usecase
 
 
 class SpeechParser:

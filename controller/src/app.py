@@ -2,8 +2,8 @@ import random
 
 import requests
 from flask import Flask, request, jsonify
-from controller.src.SpeechParser import SpeechParser
-from controller.src.config import usecases, no_answer
+from .SpeechParser import SpeechParser
+from .config import usecases, no_answer
 
 app = Flask(__name__)
 
