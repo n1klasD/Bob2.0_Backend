@@ -44,9 +44,15 @@ def process_logic(speech_text, preferences):
         usecase_response = post_request(question.get_usecase_name(),
                                         question.get_route(),
                                         preferences)
-        tts = usecase_response.text
-        further_questions = question.get_further_questions(4)
-        usecase = question.get_usecase_name(),
+
+        if usecase_response.status_code != 201:
+            tts = "Backend failure",
+            further_questions = []
+            usecase = ""
+        else:
+            tts = usecase_response.text
+            further_questions = question.get_further_questions(4)
+            usecase = question.get_usecase_name(),
     else:
         # select a random answer string
         tts = random.choice(no_answer)
