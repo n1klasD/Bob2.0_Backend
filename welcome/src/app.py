@@ -1,6 +1,7 @@
 from flask import Flask, request
 from .datasources import get_weahter_data,get_motivational_quote,get_news,get_todos,get_rapla_data
 
+
 app = Flask(__name__)
 
 userName = "userName"
@@ -36,7 +37,7 @@ def weather():
 @app.route('/todo', methods=["POST"])
 def todo():
     data = request.get_json()
-
+    return get_todos()
     return "Heute hast du keine Termine."
 
 

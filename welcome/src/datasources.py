@@ -4,13 +4,14 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+from pymstodo import ToDoConnection
 
-def get_API_Key():
+def get_API_Key(key):
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
     load_dotenv(os.path.join(BASEDIR, '.env'))
 
-    return os.getenv("RAPID_KEY")
+    return os.getenv(key)
 
 
 def get_welcome_briefing():
@@ -26,7 +27,7 @@ def get_news(category):
 
     headers = {
         'x-rapidapi-host': "free-news.p.rapidapi.com",
-        'x-rapidapi-key': get_API_Key()
+        'x-rapidapi-key': get_API_Key('RAPID_KEY')
         }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
@@ -44,7 +45,7 @@ def get_motivational_quote():
     headers = {
         "content-type": "application/json",
         "X-RapidAPI-Host": "motivational-quotes1.p.rapidapi.com",
-        "X-RapidAPI-Key": get_API_Key()
+        "X-RapidAPI-Key": get_API_Key('RAPID_KEY')
     }
 
     response = requests.request("POST", url, json=payload, headers=headers)
@@ -59,7 +60,7 @@ def get_weahter_data(city):
 
     headers = {
         "X-RapidAPI-Host": "community-open-weather-map.p.rapidapi.com",
-        "X-RapidAPI-Key": get_API_Key()
+        "X-RapidAPI-Key": get_API_Key('RAPID_KEY')
     }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
@@ -140,9 +141,16 @@ def get_rapla_data(key):
     return answer
 
 def get_todos():
-    BASEDIR = os.path.abspath(os.path.dirname(__file__))
+    client_id = get_API_Key("MS_CLIENT")
+    client_secret = get_API_Key("MS_SECRET")
+    redirect_resp = get_API_Key("MS_REDIRECT")
+    #auth_url = ToDoConnection.get_auth_url(client_id)
+    #redirect_resp = input(f'Go here and authorize:\n{auth_url}\n\nPaste the full redirect URL below:\n')
+    token = ToDoConnection.get_token(client_id, client_secret, redirect_resp)
+    todo_client = ToDoConnection(client_id=client_id, client_secret=client_secret, token=token)
 
-    load_dotenv(os.path.join(BASEDIR, '.env'))
-
-    key = os.getenv("TODO")
+    lists = todo_client.get_lists()
+    task_list = lists[0]
+    tasks = todo_client.get_tasks(task_list.list_id)
+    return str(tasks)
 
