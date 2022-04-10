@@ -45,7 +45,7 @@ def process_logic(speech_text, preferences):
                                         question.get_route(),
                                         preferences)
 
-        if usecase_response.status_code != 201:
+        if usecase_response.status_code != 200:
             tts = "Backend failure",
             further_questions = []
             usecase = ""
