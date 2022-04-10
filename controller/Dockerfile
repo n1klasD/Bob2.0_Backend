@@ -3,4 +3,4 @@ ADD ./src /controller/src
 ADD __init__.py /controller
 WORKDIR /controller/src
 RUN pip install -r requirements.txt
-CMD ["python", "app.py"]
+# CMD ["python", "app.py"]
