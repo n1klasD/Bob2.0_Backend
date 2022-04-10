@@ -65,7 +65,7 @@ def process_logic(speech_text, preferences):
         "tts": tts,
         "further_questions": further_questions
     }
-    return response
+    return jsonify(response), 200
 
 
 @app.route('/input', methods=['POST'])
