@@ -36,7 +36,7 @@ jobs:
       - name: Inject environment file
         run: |
           touch welcome/src/.env
-          echo "RAPID_KEY=${{ secrets.RAPID_KEY}}$" > .env
+          echo "RAPID_KEY=${{ secrets.RAPID_KEY}}$" > welcome/src/.env
       - name: Run tests
         run: |
           pytest welcome/tests
