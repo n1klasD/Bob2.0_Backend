@@ -1,6 +1,6 @@
 import pytest
 
-from ..src.ControllerDefinitions import Usecase, Question
+from ..src import Usecase, Question
 
 
 # ----------------------- [Question] ---------------------- #

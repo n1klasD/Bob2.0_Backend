@@ -1,7 +1,7 @@
 import pytest
 
-from ..src.ControllerDefinitions import Usecase, Question
-from ..src.SpeechParser import SpeechParser
+from ..src import Usecase, Question
+from ..src import SpeechParser
 
 
 @pytest.fixture
