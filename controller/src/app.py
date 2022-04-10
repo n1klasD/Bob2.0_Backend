@@ -28,8 +28,8 @@ def post_request(usecase_name, route, json_data):
     }
 
     port = usecase2port[usecase_name]
-    # url = "http://" + usecase_name + ":" + str(port) + route
-    url = "http://localhost:" + str(port) + route
+    url = "http://" + usecase_name + ":" + str(port) + route
+    # url = "http://localhost:" + str(port) + route
     return requests.post(url, json=json_data)
 
 
@@ -45,7 +45,7 @@ def process_logic(speech_text, preferences):
                                         question.get_route(),
                                         preferences)
 
-        if usecase_response.status_code != 200:
+        if usecase_response.status_code != 200 and usecase_response.status_code != 201:
             tts = "Backend failure",
             further_questions = []
             usecase = ""
