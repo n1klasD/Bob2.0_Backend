@@ -4,11 +4,10 @@ import requests
 import json
 
 
-
-
 def get_welcome_briefing():
     answer = ""
     return answer
+
 
 def get_motivational_quote():
     url = "https://motivational-quotes1.p.rapidapi.com/motivation"
@@ -26,6 +25,7 @@ def get_motivational_quote():
     response = requests.request("POST", url, json=payload, headers=headers)
     return response.text
 
+
 def get_weahter_data(city):
     url = "https://community-open-weather-map.p.rapidapi.com/climate/month"
 
@@ -38,20 +38,20 @@ def get_weahter_data(city):
 
     response = requests.request("GET", url, headers=headers, params=querystring)
     text = json.loads(response.text)
-    
+
     if not response.ok:
         return "Kein valider Ort angegeben."
-    
+
     today = text['list'][0]
     if today['humidity'] > 50:
         humidity = 'niedriger'
     else:
         humidity = 'hoher'
-        
+
     if today['temp']['average'] < 16:
-        clothing ="Du solltest dir eine Jacke anziehen."
+        clothing = "Du solltest dir eine Jacke anziehen."
     elif today['temp']['average'] < 22:
-        clothing ="Du solltest dir noch einen Pulli mitnehmen."
+        clothing = "Du solltest dir noch einen Pulli mitnehmen."
     else:
         clothing = "Heute reicht ein T-Shirt."
     # return f"Heute wird es im Durchschnitt {str(text['list'][0]['temp']['average'])} Grad"
