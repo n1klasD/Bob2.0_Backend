@@ -1,8 +1,11 @@
 from flask import Flask, request
 import datasources
 
-
 app = Flask(__name__)
+userName = "userName"
+rapla = "raplaLink"
+city = "weatherLocation"
+news = "newsCategories"
 
 
 @app.route('/')
@@ -13,36 +16,40 @@ def index():
 @app.route('/welcome', methods=["POST"])
 def briefing():
     data = request.get_json()
-    userName = "Simon"
+    
     sources = datasources.WelcomeSource()
-    return f"Guten Morgen {userName}. {sources.get_weahter_data()} Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: {sources.get_motivational_quote()}."
+    return f"Guten Morgen {data[userName]}. \
+        {datasources.get_weahter_data(data['weatherLocation'])} \
+        Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. Was du vielleicht verpasst hast: _Nachrichten API_. Und vergiss nicht: {sources.get_motivational_quote()}."
 
 
 @app.route('/wetter', methods=["POST"])
 def weather():
     data = request.get_json()
-    sources = datasources.WelcomeSource()
-    weather = sources.get_weahter_data()
+    
+    weather = datasources.get_weahter_data(data[city])
     return weather
 
 
 @app.route('/todo', methods=["POST"])
 def todo():
     data = request.get_json()
+    
+    
     return "Heute hast du keine Termine."
 
 
 @app.route('/termine', methods=["POST"])
 def calendar():
     data = request.get_json()
+    
     return "Heute hast du keine Termine."
 
 
 @app.route('/stundenplan', methods=["POST"])
 def timetable():
     data = request.get_json()
-    source = datasources.WelcomeSource()
-    answer = source.get_rapla_data()
+    answer = datasources.get_rapla_data("txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV")
     return answer
 
 
