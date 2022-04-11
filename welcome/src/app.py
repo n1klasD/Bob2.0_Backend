@@ -1,5 +1,5 @@
 from flask import Flask, request
-from datasources import get_weather_data,get_motivational_quote,get_news_data,get_rapla_data
+import datasources
 
 
 app = Flask(__name__)
@@ -20,16 +20,16 @@ def briefing():
     data = request.get_json()
 
     return f"Guten Morgen {data[userName]}. \
-        {get_weather_data(data[city])} \
+        {datasources.get_weather_data(data[city])} \
         Dein erster Termin ist um 9 Uhr, gefolgt von 13 Uhr danach eine Pause bis 17 Uhr, danach sind deine geplanten Termine erledigt. \
-        Was du vielleicht verpasst hast: {get_news_data(data[news])}.\
-        Und vergiss nicht: {get_motivational_quote()}."
+        Was du vielleicht verpasst hast: {datasources.get_news_data(data[news])}.\
+        Und vergiss nicht: {datasources.get_motivational_quote()}."
 
 
 @app.route('/wetter', methods=["POST"])
 def weather():
     data = request.get_json()
-    weather = get_weather_data(data[city])
+    weather = datasources.get_weather_data(data[city])
     return weather
 
 @app.route('/termine', methods=["POST"])
@@ -42,7 +42,7 @@ def calendar():
 @app.route('/stundenplan', methods=["POST"])
 def timetable():
     data = request.get_json()
-    answer = get_rapla_data("txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV")
+    answer = datasources.get_rapla_data("txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV")
     return answer
 
 if __name__ == "__main__":
