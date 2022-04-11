@@ -18,7 +18,7 @@ def get_welcome_briefing():
     answer = ""
     return answer
 
-def get_news(category):
+def get_news_data(category):
 
     url = "https://free-news.p.rapidapi.com/v1/search"
     if(category is None):
@@ -52,7 +52,7 @@ def get_motivational_quote():
     return response.text
 
 
-def get_weahter_data(city):
+def get_weather_data(city):
 
     url = "https://community-open-weather-map.p.rapidapi.com/climate/month"
 
