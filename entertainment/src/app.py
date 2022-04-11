@@ -1,10 +1,11 @@
-from flask import Flask
+from flask import Flask, request
+from entertainment.src import datasource, config
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/movies")
+def movies():
 
-def hello():
     return "Hello from Entertainment dialog"
 
 if __name__ == "__main__":
