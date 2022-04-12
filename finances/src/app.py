@@ -1,13 +1,34 @@
 from flask import Flask, request
 
-from finances.src import datasource, config
+import finances.src.datasource
+from finances.src import datasource
 
 app = Flask(__name__)
 
 
-@app.route("/crypto")
+@app.route("/briefing", methods=['POST'])
+def briefing():
+    answer = "Dein tägliches Finanz-Update.\n\nDay Gainers:\n"
+
+    day_gainers = finances.src.datasource.get_top_3_day_gainers()
+    for _, day_gainer in day_gainers.iterrows():
+        name, _, _ = datasource.get_ticker_info(day_gainer.Symbol)
+        answer += f"{name} ist ein Gainer mit {day_gainer['% Change']} % Zunahme.\n"
+
+    answer += "\n" + favourites()
+    answer += "\n" + leading()
+    answer += "\n" + wallstreetbets()
+
+    return answer
+
+
+@app.route("/crypto", methods=['POST'])
 def crypto():
-    balances = datasource.get_binance_info(configuration.binance_key_public, configuration.binance_key_private)
+    data = request.get_json()
+    public_binance_api_key = data["publicBinanceApiKey"]
+    private_binance_api_key = data["privateBinanceApiKey"]
+
+    balances = datasource.get_binance_info(public_binance_api_key, private_binance_api_key)
     balances_not_null = []
 
     for balance in balances:
@@ -20,29 +41,25 @@ def crypto():
     return "Du hast aktuell keine Kryptos.\n"
 
 
-@app.route("/favourites")
+@app.route("/favourites", methods=['POST'])
 def favourites():
+    data = request.get_json()
+    fav_stocks = data["stockList"]
+
     answer = "Deine Favoriten: \n"
-    for ticker in configuration.fav_stocks:
+    for ticker in fav_stocks:
         answer += ticker_info(ticker)
 
     return answer
 
 
-@app.route("/leading")
+@app.route("/leading", methods=['POST'])
 def leading():
-    answer = "Dein favorisierter Leitindex: \n"
-    answer += ticker_info(configuration.fav_leading_index)
-    return answer
-
-
-@app.route("/settings", methods=['POST'])
-def settings():
     data = request.get_json()
-    configuration.binance_key_private = data["binance_key_private"]
-    configuration.binance_key_public = data["binance_key_public"]
-    configuration.fav_stocks = data["fav_stocks"]
-    configuration.fav_leading_index = data["fav_leading_index"]
+    stock_index = data["stockIndex"]
+    answer = "Dein favorisierter Leitindex: \n"
+    answer += ticker_info(stock_index)
+    return answer
 
 
 @app.route("/wallstreetbets")
@@ -79,11 +96,4 @@ def ticker_info(ticker):
 
 
 if __name__ == "__main__":
-    configuration = config.Configuration(
-        binance_key_public="Yiux33U9VQCjdAr9R10HurLLasClPCyKFrKAAmghh7koEDE6XCvd6AWGQJl0D8pp",
-        binance_key_private="ejpcwWp7vXTJ8XGb8GGtlg7Kukz2z8wmtzPMqtdSXRAnhddAYqLykhkmPnGrGKGG",
-        fav_stocks=["ibm", "hpe", "btc-usd"],
-        fav_leading_index="^gdaxi"
-    )
-
     app.run(host="0.0.0.0", port=8003, debug=True)

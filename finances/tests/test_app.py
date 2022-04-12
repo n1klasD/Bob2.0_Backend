@@ -2,15 +2,15 @@ import pytest
 from mock import patch
 
 import finances.src.app
-from finances.src import config
 from finances.src.app import app as flask_app
 
-finances.src.app.configuration = config.Configuration(
-    binance_key_public="Yiux33U9VQCjdAr9R10HurLLasClPCyKFrKAAmghh7koEDE6XCvd6AWGQJl0D8pp",
-    binance_key_private="ejpcwWp7vXTJ8XGb8GGtlg7Kukz2z8wmtzPMqtdSXRAnhddAYqLykhkmPnGrGKGG",
-    fav_stocks=["ibm", "hpe", "btc-usd"],
-    fav_leading_index="^gdaxi"
-)
+
+class CustomRequest:
+    def __init__(self, json_data):
+        self.json_data = json_data
+
+    def get_json(self):
+        return self.json_data
 
 
 # pragma: no cover
@@ -26,7 +26,13 @@ def client(app):
 
 
 def test_crypto(client):
-    with patch("finances.src.datasource.get_binance_info") as patched_get_binance_info:
+    with patch("finances.src.datasource.get_binance_info") as patched_get_binance_info, \
+            finances.src.app.app.test_client() as c:
+        c.post("/crypto", json={
+            "publicBinanceApiKey": "",
+            "privateBinanceApiKey": ""
+        })
+
         patched_get_binance_info.return_value = [
             {
                 "free": 0,
@@ -45,7 +51,12 @@ def test_crypto(client):
 
 
 def test_favourites(client):
-    with patch("finances.src.app.ticker_info") as patched_ticker_info:
+    with patch("finances.src.app.ticker_info") as patched_ticker_info, \
+            finances.src.app.app.test_client() as c:
+        c.post("/favourites", json={
+            "stockList": ["", "", ""],
+        })
+
         patched_ticker_info.return_value = "Aktie"
 
         answer = finances.src.app.favourites()
@@ -54,7 +65,12 @@ def test_favourites(client):
 
 
 def test_leading(client):
-    with patch("finances.src.datasource.get_ticker_info") as patched_get_ticker_info:
+    with patch("finances.src.datasource.get_ticker_info") as patched_get_ticker_info, \
+            finances.src.app.app.test_client() as c:
+        c.post("/crypto", json={
+            "stockIndex": "",
+        })
+
         patched_get_ticker_info.return_value = ("German dax", 10000, "EUR")
 
         answer = finances.src.app.leading()

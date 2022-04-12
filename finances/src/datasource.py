@@ -1,7 +1,7 @@
 import requests
 from binance import Client
 from bs4 import BeautifulSoup
-from yahoo_fin.stock_info import get_quote_data
+from yahoo_fin.stock_info import get_quote_data, get_day_gainers
 
 
 def get_binance_info(key_public, key_private):
@@ -13,6 +13,10 @@ def get_binance_info(key_public, key_private):
 def get_ticker_info(ticker):
     info = get_quote_data(ticker)
     return info["shortName"], info["regularMarketPrice"], info["currency"]
+
+
+def get_top_3_day_gainers():
+    return get_day_gainers(3)
 
 
 def get_most_discussed_stock():

@@ -32,6 +32,13 @@ def test_binance():
                balances[1]["asset"] == "eth"
 
 
+def test_day_gainers():
+    with patch("finances.src.datasource.get_day_gainers") as patched_get_day_gainers:
+        patched_get_day_gainers.return_value = [1, 2, 3]
+
+        assert datasource.get_top_3_day_gainers() == [1, 2, 3]
+
+
 def test_yahoo():
     with patch("finances.src.datasource.get_quote_data") as patched_get_quote_data:
         patched_get_quote_data.return_value = {"shortName": "IBM", "regularMarketPrice": 4000.00, "currency": "USD"}
