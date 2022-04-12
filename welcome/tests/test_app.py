@@ -4,7 +4,7 @@ import pytest
 from mock import patch, Mock
 from flask import request
 
-from ..src import app as flask_app, weather,briefing, index
+from ..src import app as flask_app, weather,briefing, index, timetable
 from ..src import datasources
 
 
@@ -34,10 +34,12 @@ def test_briefing():
         rv = c.post('/welcome', json={
             'weatherLocation': place,
             'userName': userName,
-            'newsCategories': ["Deutschland"]
+            'newsCategories': ["Deutschland"],
+            "raplaLink": "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
+
         })
         answer = briefing()
-        assert place in answer and userName in answer
+        assert place in answer and userName in answer and "Vorlesung" in answer
 
 def test_briefing_no_weather():
     with flask_app.test_client() as c:
@@ -46,10 +48,11 @@ def test_briefing_no_weather():
         rv = c.post('/welcome', json={
             'weatherLocation': place,
             'userName': userName,
-            'newsCategories': "Deutschland"
+            'newsCategories': "Deutschland",
+            "raplaLink": "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
         })
         answer = briefing()
-        assert place not in answer and userName in answer and "Ort" not in answer
+        assert place not in answer and userName in answer and "Ort" not in answer and "Vorlesung" in answer
  
 def test_index():
     answer = index()
@@ -67,3 +70,20 @@ def test_news():
         })
         answer = briefing()
         assert any(cat in answer for cat in cats)
+
+def test_studenplan():
+     with flask_app.test_client() as c:
+        rv = c.post('/stundenplan', json={
+            "raplaLink": "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
+        })
+        answer = timetable()
+        assert "Vorlesung" in answer and not "Stundenplan" in answer
+
+def test_bad_timetable():
+     with flask_app.test_client() as c:
+        rv = c.post('/stundenplan', json={
+        })
+        answer = timetable()
+        assert not "Vorlesung" in answer and "Stundenplan" in answer
+
+ 

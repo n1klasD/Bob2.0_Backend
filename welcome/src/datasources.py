@@ -31,9 +31,12 @@ def get_news_data(category):
 
     response = requests.request("GET", url, headers=headers, params=querystring)
     text = json.loads(response.text)
-    text = text['articles'][0]
+    
     if not response.ok:
         return (f"{category}: Keine Neuigkeiten.")
+    elif not 'articles' in text:
+        return (f"{category}: Keine Neuigkeiten.")
+    text = text['articles'][0]
     return(f"{category}: {text['title']} (von {text['author']},{text['published_date']}) Hier weiterlesen: {text['link']}")
 
 def get_motivational_quote():
@@ -101,7 +104,7 @@ def get_rapla_data(key):
             now = datetime.datetime.strptime(date, "%d.%m.%y")
         except:
 
-            return "Invalid Format"
+            return "Kein Valides Link Format."
 
     # add date as url params
     link += "&day=" + str(now.day)
@@ -143,17 +146,4 @@ def get_rapla_data(key):
         return "Heute hast du keine Vorlesungen."
     return answer
 
-def get_todos():
-    client_id = get_API_Key("MS_CLIENT")
-    client_secret = get_API_Key("MS_SECRET")
-    redirect_resp = get_API_Key("MS_REDIRECT")
-    #auth_url = ToDoConnection.get_auth_url(client_id)
-    #redirect_resp = input(f'Go here and authorize:\n{auth_url}\n\nPaste the full redirect URL below:\n')
-    token = ToDoConnection.get_token(client_id, client_secret, redirect_resp)
-    todo_client = ToDoConnection(client_id=client_id, client_secret=client_secret, token=token)
-
-    lists = todo_client.get_lists()
-    task_list = lists[0]
-    tasks = todo_client.get_tasks(task_list.list_id)
-    return str(tasks)
 
