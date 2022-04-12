@@ -1,6 +1,8 @@
 import random
 import requests
-
+from datetime import date
+import xmltodict
+import json
 
 api_key = "k_qhn64207"
 x_auth_token = "65065e29253e4f5abdf58266f37ea73c"
@@ -65,7 +67,7 @@ def search_series_by_genre(genres: list[str]):
     return series_title, series_runtime, series_rating
 
 
-def get_future_football_matches_by_team(favourite_team: str):
+def get_future_football_match_by_team(favourite_team: str):
     future_matches_list = []
     bundesliga = get_bundesliga()
     bundesliga_teams = bundesliga['teams']
@@ -114,8 +116,8 @@ def get_bundesliga():
     return data
 
 
-def convert_datetime(datetime):
-    split_string = datetime.split("T")
+def convert_datetime(next_match_datetime):
+    split_string = next_match_datetime.split("T")
     date = split_string[0]
     time = split_string[1]
     split_date = date.split("-")
@@ -125,6 +127,36 @@ def convert_datetime(datetime):
     date = day+"."+month+"."+year
     time = hours+":"+minutes
     return date, time
+
+
+def get_future_race(next_year):
+    current_date = date.today()
+    current_year = current_date.year
+    url = "http://ergast.com/api/f1/"
+    if next_year:
+        url = url + str(current_year+1)
+    else:
+        url = url + str(current_year)
+    response = requests.get(url)
+    data_as_string = json.dumps(xmltodict.parse(response.text))
+    data = json.loads(data_as_string)
+    races = data['MRData']['RaceTable']['Race']
+    for race in races:
+        race_date = race['Date']
+        race_time = race['Time']
+        split_race_date = race_date.split('-')
+        split_race_time = race_time.split(':')
+        race_day, race_month, race_year = int(split_race_date[2]), int(split_race_date[1]), int(split_race_date[0])
+        race_minutes, race_hours = split_race_time[1], split_race_time[0]
+        if race_day >= current_date.day and race_month >= current_date.month and race_year >= current_date.year:
+            race_name = race['RaceName']
+            circuit_name = race['Circuit']['CircuitName']
+            race_date = str(race_day)+"."+str(race_month)+"."+str(race_year)
+            race_time = race_hours+":"+race_minutes
+            return race_name, circuit_name, race_date, race_time
+    # in case there isn't another race this year, the data of the first race of the next year is returned
+    return get_future_race(next_year)
+
 
 # Attempt at scraping, option B if nothing else works
 '''def search_movie_by_name(movie):
