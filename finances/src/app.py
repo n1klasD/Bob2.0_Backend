@@ -61,7 +61,7 @@ def leading():
     return answer
 
 
-@app.route("/wallstreetbets")
+@app.route("/wallstreetbets", methods=['POST'])
 def wallstreetbets():
     try:
         most_discussed = datasources.get_most_discussed_stock()
@@ -74,7 +74,7 @@ def wallstreetbets():
         return "Wallstreetbets kann gerade nicht abgerufen werden"
 
 
-@app.route("/nft")
+@app.route("/nft", methods=['POST'])
 def nft():
     try:
         name, collection, hours_ago, value = datasources.get_top_nft()
