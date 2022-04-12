@@ -4,7 +4,6 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
-from pymstodo import ToDoConnection
 import random
 
 def get_API_Key(key):
