@@ -1,11 +1,37 @@
 import random
-
-from bs4 import BeautifulSoup
 import requests
-import re
 
 
-def search_movie_by_name(movie):
+api_key = "k_nblvo64n"
+
+
+def search_movie_by_genre(genres: list[str]):
+    movies = []
+    url = "https://imdb-api.com/API/AdvancedSearch/"+api_key+"/?genres="
+    for genre in genres:
+        genre = genre.replace("-", "_").lower()
+        url = url+genre+","
+    response = requests.get(url)
+    data = response.json()
+    results = data['results']
+    for result in results:
+        movies.append(result['title'])
+    random_index = random.randint(0, len(movies)-1)
+    movie = movies[random_index]
+    movie = search_movie(movie)
+    return movie
+
+
+def search_movie(movie):
+    url = "https://imdb-api.com/API/SearchMovie/"+api_key+"/"+movie
+    response = requests.get(url)
+    data = response.json()
+    results = data['results']
+    return results[0]['title']
+
+
+# Attempt at scraping, option B if nothing else works
+'''def search_movie_by_name(movie):
     return 0
 
 
@@ -85,53 +111,6 @@ def search_movies_by_genre(genre):
            "Spielzeit: "+movies['durations'][random_index]
 
 
-print(search_movies_by_genre("horror"))
+print(search_movies_by_genre("horror"))'''
 
 
-
-# for movie in found_movies['names']:
-#    print(movie)
-''' for i in range(0, len(search)):
-        movie_id = search[i].movieID
-        movie_object = ia.get_movie(movie_id)
-
-        if movie_object == search[i]:
-            print(movie_object)
-            print(search[i])
-            print("wtf")
-        else:
-            print("Hurensohn")
-        for movie_genre in search[i]['genres']:
-            if movie_genre == genre:
-                genre_fitting_movies.append(search[i])
-            else:
-                print(movie_genre)
-    for movie in search:
-        movie_id = movie.movieID
-        movie_object = ia.get_movie(movie_id)
-        for movie_genre in movie_object['genres']:
-            if movie_genre == genre:
-                genre_fitting_movies.append(movie_object)
-            else:
-                print(movie_genre)
-        #ia.update(movie_object, info=['genres'])
-        #if movie_object.genres.lower() == genre.lower():
-        #    genre_fitting_movies.append(movie_object)
-        #print(movie_object['name'])'''
-
-'''    the_matrix = ia.get_movie('0133093')
-    for director in the_matrix['directors']:
-        print(director['name'])
-    
-    print(sorted(the_matrix.keys()))
-    
-    print(ia.get_movie_infoset())
-    
-    ia.update(the_matrix, ['technical'])
-    print(the_matrix.infoset2keys['technical'])
-    print(the_matrix.get('tech'))
-    
-    
-    
-    for i in range(10):
-        print(search[i]['title'])'''
