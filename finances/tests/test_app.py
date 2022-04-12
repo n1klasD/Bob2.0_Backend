@@ -107,3 +107,7 @@ def test_ticker_info(client):
         assert "tsla" in answer and "500" in answer and "USD" in answer
 
 """
+
+
+def test_placeholder():
+    assert True
