@@ -89,6 +89,6 @@ def bob_avatar():
     """
     Return Avatar image of Bob
     """
-    path = os.path.join(os.getcwd(), "static")
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "static")
     path = os.path.join(path, "bob_head.png")
     return send_file(path, mimetype="image/png")
