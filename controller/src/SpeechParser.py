@@ -24,8 +24,7 @@ class SpeechParser:
             for question in usecase.get_questions():
                 if question.match_keywords(speech_text):
                     return question
-        else:
-            return None
+        return None
 
     def has_overlapping_keywords(self):
         """
