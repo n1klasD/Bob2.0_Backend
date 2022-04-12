@@ -2,7 +2,14 @@ import random
 import requests
 
 
-api_key = "k_nblvo64n"
+api_key = "k_qhn64207"
+
+
+def get_metadata(movie_id):
+    url = "https://imdb-api.com/API/Title/"+api_key+"/"+movie_id
+    response = requests.get(url)
+    movie_metadata = response.json()
+    return movie_metadata
 
 
 def search_movie_by_genre(genres: list[str]):
@@ -15,19 +22,48 @@ def search_movie_by_genre(genres: list[str]):
     data = response.json()
     results = data['results']
     for result in results:
-        movies.append(result['title'])
-    random_index = random.randint(0, len(movies)-1)
-    movie = movies[random_index]
-    movie = search_movie(movie)
-    return movie
+        movies.append(result)
+    movie_found = False
+    while not movie_found:
+        random_index = random.randint(0, len(movies) - 1)
+        movie = movies[random_index]
+        movie_id = movie['id']
+        movie_metadata = get_metadata(movie_id)
+        if movie_metadata['type'] == "Movie":
+            movie_found = True
+    movie_title = movie_metadata['title']
+    movie_runtime = movie_metadata['runtimeStr']
+    movie_rating = movie_metadata['imDbRating']
+
+    return movie_title, movie_runtime, movie_rating
 
 
-def search_movie(movie):
-    url = "https://imdb-api.com/API/SearchMovie/"+api_key+"/"+movie
+def search_series_by_genre(genres: list[str]):
+    series_list = []
+    url = "https://imdb-api.com/API/AdvancedSearch/"+api_key+"/?genres="
+    for genre in genres:
+        genre = genre.replace("-", "_").lower()
+        url = url+genre+","
     response = requests.get(url)
     data = response.json()
     results = data['results']
-    return results[0]['title']
+    for result in results:
+        series_list.append(result)
+    series_found = False
+    while not series_found:
+        random_index = random.randint(0, len(series_list) - 1)
+        series = series_list[random_index]
+        series_id = series['id']
+        series_metadata = get_metadata(series_id)
+        if series_metadata['type'] == "TVSeries":
+            series_found = True
+    series_title = series_metadata['title']
+    series_runtime = series_metadata['runtimeStr']
+    series_rating = series_metadata['imDbRating']
+
+    return series_title, series_runtime, series_rating
+
+
 
 
 # Attempt at scraping, option B if nothing else works
