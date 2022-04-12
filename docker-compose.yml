@@ -7,13 +7,32 @@ services:
       - "80:8000"
     networks:
       - internal
-    depends_on:
-      - welcome
   welcome:
     image: 1646552/welcome:latest
     container_name: "welcome"
     ports:
       - "8001:8001"
+    networks:
+      - internal
+  entertainment:
+    image: 1646552/entertainment:latest
+    container_name: "entertainment"
+    ports:
+      - "8002:8002"
+    networks:
+      - internal
+  finances:
+    image: 1646552/finances:latest
+    container_name: "finances"
+    ports:
+      - "8003:8003"
+    networks:
+      - internal
+  journey:
+    image: 1646552/journey:latest
+    container_name: "journey"
+    ports:
+      - "8004:8004"
     networks:
       - internal
 networks:
