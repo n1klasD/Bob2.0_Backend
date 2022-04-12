@@ -7,7 +7,8 @@ from typing import List
 class Question:
     def __init__(self, route: str, keywords: List[str], example_questions: List[str]):
         self._route = route
-        self._keywords = keywords
+        self._keywords = [keyword.lower() for keyword in keywords]
+
         self._example_questions = example_questions
         self._usecase: Usecase | None = None
 

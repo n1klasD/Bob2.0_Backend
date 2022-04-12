@@ -34,6 +34,41 @@ usecases = [
             )
         ]
     ),
+    Usecase(
+        name="finances",
+        questions=[
+            Question(
+                route="/briefing",
+                keywords=["marktsituation", "finanzübersicht"],
+                example_questions=["Wie ist die aktuelle Marktsituation?", "Gib mir eine Finzanzübersicht"]
+            ),
+            Question(
+                route="/crypto",
+                keywords=["krypto", "crypto", "wallet", "coin"],
+                example_questions=["Wie stehen meine Kryptowährungen?"]
+            ),
+            Question(
+                route="/favourites",
+                keywords=["favoriten", "aktien", "portfolio"],
+                example_questions=["Wie stehen meine Aktien?"]
+            ),
+            Question(
+                route="/leading",
+                keywords=["index", "dax"],
+                example_questions=["Wie steht mein favorisierter Leitindex?"]
+            ),
+            Question(
+                route="/wallstreetbets",
+                keywords=["wallstreetbets", "trend", "reddit", "Stimmung", "GME"],
+                example_questions=["Wie ist die Stimmung auf Reddit?"]
+            ),
+            Question(
+                route="/nft",
+                keywords=["nft"],
+                example_questions=["Was passiert auf dem NFT Markt?"]
+            )
+        ]
+    )
 ]
 
 no_answer = [

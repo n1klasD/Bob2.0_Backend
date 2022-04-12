@@ -1,5 +1,5 @@
 from flask import Flask, request
-from datasources import get_weather_data,get_motivational_quote,get_news_data,get_rapla_data
+from .datasources import get_weather_data, get_motivational_quote, get_news_data, get_rapla_data, get_welcome_briefing
 
 
 app = Flask(__name__)
@@ -44,6 +44,3 @@ def timetable():
     data = request.get_json()
     answer = get_rapla_data("txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV")
     return answer
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8001, debug=True)

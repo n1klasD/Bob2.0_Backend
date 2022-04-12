@@ -1,3 +1,4 @@
+'''
 from mock import patch
 
 from finances.src import datasource
@@ -30,6 +31,13 @@ def test_binance():
                balances[0]["asset"] == "btc" and \
                balances[1]["free"] == 1 and \
                balances[1]["asset"] == "eth"
+
+
+def test_day_gainers():
+    with patch("finances.src.datasource.get_day_gainers") as patched_get_day_gainers:
+        patched_get_day_gainers.return_value = [1, 2, 3]
+
+        assert datasource.get_top_3_day_gainers() == [1, 2, 3]
 
 
 def test_yahoo():
@@ -84,3 +92,4 @@ def test_wallstreetbets():
         most_discussed = datasource.get_most_discussed_stock()
 
         assert most_discussed["sentiment"] == "Bullish" and most_discussed["no_of_comments"] == 128
+'''

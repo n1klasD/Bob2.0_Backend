@@ -1,7 +1,8 @@
+import os
 import random
 
 import requests
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from .SpeechParser import SpeechParser
 from .config import usecases, no_answer
 
@@ -81,3 +82,13 @@ def process_text():
     response = process_logic(speech_text, preferences)
 
     return jsonify(response), 200
+
+
+@app.route("/bob_head")
+def bob_avatar():
+    """
+    Return Avatar image of Bob
+    """
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "static")
+    path = os.path.join(path, "bob_head.png")
+    return send_file(path, mimetype="image/png")
