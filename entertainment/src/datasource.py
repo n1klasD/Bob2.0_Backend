@@ -3,6 +3,7 @@ import requests
 
 
 api_key = "k_qhn64207"
+x_auth_token = "65065e29253e4f5abdf58266f37ea73c"
 
 
 def get_metadata(movie_id):
@@ -64,7 +65,66 @@ def search_series_by_genre(genres: list[str]):
     return series_title, series_runtime, series_rating
 
 
+def get_future_football_matches_by_team(favourite_team: str):
+    future_matches_list = []
+    bundesliga = get_bundesliga()
+    bundesliga_teams = bundesliga['teams']
+    favourite_team_id = get_team_id(bundesliga_teams, favourite_team)
+    if favourite_team_id != -1:
+        url = "https://api.football-data.org/v2/teams/"+str(favourite_team_id)+"/matches/"
+        headers = {
+            'X-Auth-Token': x_auth_token
+        }
+        response = requests.get(url, headers=headers)
+        data = response.json()
+        matches = data['matches']
+        for match in matches:
+            if match['status'] == "SCHEDULED":
+                future_matches_list.append(match)
+        if len(future_matches_list) > 0:
+            next_match = future_matches_list[0]
+            next_match_datetime = next_match['utcDate']
+            next_match_date, next_match_time = convert_datetime(next_match_datetime)
+            next_match_teams = [next_match['homeTeam']['name'], next_match['awayTeam']['name']]
+            if next_match_teams[0] == favourite_team:
+                opposing_team = next_match_teams[1]
+            else:
+                opposing_team = next_match_teams[0]
+            return favourite_team, next_match_date, next_match_time, opposing_team
+        else:
+            return -1, -1, -1, -1
+    else:
+        return -1, -1, -1, -1
 
+
+def get_team_id(teams_list, team):
+    for entry in teams_list:
+        if entry['name'] == team:
+            return entry['id']
+    return -1
+
+
+def get_bundesliga():
+    url = "https://api.football-data.org/v2/competitions/2002/teams"
+    headers = {
+        'X-Auth-Token': x_auth_token
+    }
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    return data
+
+
+def convert_datetime(datetime):
+    split_string = datetime.split("T")
+    date = split_string[0]
+    time = split_string[1]
+    split_date = date.split("-")
+    split_time = time.split(":")
+    day, month, year = split_date[2], split_date[1], split_date[0]
+    minutes, hours = split_time[1], split_time[0]
+    date = day+"."+month+"."+year
+    time = hours+":"+minutes
+    return date, time
 
 # Attempt at scraping, option B if nothing else works
 '''def search_movie_by_name(movie):
