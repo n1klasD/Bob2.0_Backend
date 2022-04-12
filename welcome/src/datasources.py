@@ -5,6 +5,7 @@ import json
 import os
 from dotenv import load_dotenv
 from pymstodo import ToDoConnection
+import random
 
 def get_API_Key(key):
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
@@ -14,15 +15,13 @@ def get_API_Key(key):
     return os.getenv(key)
 
 
-def get_welcome_briefing():
-    answer = ""
-    return answer
-
 def get_news_data(category):
 
     url = "https://free-news.p.rapidapi.com/v1/search"
     if(category is None):
         category = "News"
+    else:
+        category = random.choice(category)
     querystring = {"q":category,"lang":"de"}
 
     headers = {
@@ -32,7 +31,10 @@ def get_news_data(category):
 
     response = requests.request("GET", url, headers=headers, params=querystring)
     text = json.loads(response.text)
-    return(text['articles'][0]['title'])
+    text = text['articles'][0]
+    if not response.ok:
+        return (f"{category}: Keine Neuigkeiten.")
+    return(f"{category}: {text['title']} (von {text['author']},{text['published_date']}) Hier weiterlesen: {text['link']}")
 
 def get_motivational_quote():
     
@@ -49,7 +51,7 @@ def get_motivational_quote():
     }
 
     response = requests.request("POST", url, json=payload, headers=headers)
-    return response.text
+    return response.text.strip("\n")
 
 
 def get_weather_data(city):
@@ -64,8 +66,7 @@ def get_weather_data(city):
     }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
-    text = json.loads(response.text)
-
+    text = json.loads(response.text)   
     if not response.ok:
         return "Kein valider Ort angegeben."
 
@@ -131,13 +132,15 @@ def get_rapla_data(key):
         time = info[1].split(" ")
         if weekdays_german.index(time[0]) != weekday:
             continue
+        
         course = info[3]
         person = ""
         if "Personen:" in info:
             person += " bei " + info[info.index("Personen:") + 1]
 
-        answer += time[1] + ": " + course + person[:-1] + "\n"
-
+        answer += time[2][:11] + " : " + course + person[:-1] + "\n"
+    if answer == "Heute hast du diese Vorlesungen: ":
+        return "Heute hast du keine Vorlesungen."
     return answer
 
 def get_todos():
