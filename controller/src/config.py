@@ -38,6 +38,11 @@ usecases = [
         name="finances",
         questions=[
             Question(
+                route="/briefing",
+                keywords=["Marktsituation", "Finanzübersicht"],
+                example_questions=["Wie ist die aktuelle Marktsituation?", "Gib mir eine FInzanzübersicht"]
+            ),
+            Question(
                 route="/crypto",
                 keywords=["Krypto", "crypto", "Wallet", "coin"],
                 example_questions=["Wie stehen meine Kryptowährungen?"]
@@ -49,8 +54,8 @@ usecases = [
             ),
             Question(
                 route="/leading",
-                keywords=["Index", "DAX", "Marktsituation"],
-                example_questions=["Wie ist die aktuelle Marktsituation?", "Wie steht mein favorisierter Leitindex?"]
+                keywords=["Index", "DAX"],
+                example_questions=["Wie steht mein favorisierter Leitindex?"]
             ),
             Question(
                 route="/wallstreetbets",
