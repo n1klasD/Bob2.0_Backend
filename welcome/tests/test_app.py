@@ -4,9 +4,8 @@ import pytest
 from mock import patch, Mock
 from flask import request
 
-import welcome.src.datasources
-import welcome.src.app
-from welcome.src.app import app as flask_app
+from ..src import app as flask_app, weather
+from ..src import datasources
 
 
 
@@ -16,7 +15,7 @@ def test_good_weather():
         rv = c.post('/wetter', json={
             'weatherLocation': place
         })
-        answer = welcome.src.app.weather()
+        answer = weather()
         assert "Grad" in answer and "Luftfeuchtigkeit" in answer and place in answer
 
 def test_bad_weather():
@@ -25,8 +24,8 @@ def test_bad_weather():
         rv = c.post('/wetter', json={
             'weatherLocation': place
         })
-        answer = welcome.src.app.weather()
-        assert ""
+        answer = weather()
+        assert "Kein valider Ort angegeben" in answer
  
 
 
