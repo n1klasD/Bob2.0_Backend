@@ -4,7 +4,7 @@ import pytest
 from mock import patch, Mock
 from flask import request
 
-from ..src import app as flask_app, weather
+from ..src import app as flask_app, weather,briefing, index, timetable
 from ..src import datasources
 
 
@@ -27,25 +27,63 @@ def test_bad_weather():
         answer = weather()
         assert "Kein valider Ort angegeben" in answer
  
+def test_briefing():
+    with flask_app.test_client() as c:
+        place = "Stuttgart"
+        userName = "Simon"
+        rv = c.post('/welcome', json={
+            'weatherLocation': place,
+            'userName': userName,
+            'newsCategories': ["Deutschland"],
+            "raplaLink": "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
 
+        })
+        answer = briefing()
+        assert place in answer and userName in answer and "Vorlesung" in answer
 
-"""
+def test_briefing_no_weather():
+    with flask_app.test_client() as c:
+        place = "Stutttgart"
+        userName = "Simon"
+        rv = c.post('/welcome', json={
+            'weatherLocation': place,
+            'userName': userName,
+            'newsCategories': "Deutschland",
+            "raplaLink": "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
+        })
+        answer = briefing()
+        assert place not in answer and userName in answer and "Ort" not in answer and "Vorlesung" in answer
+ 
+def test_index():
+    answer = index()
+    assert answer == "Dies ist der Welcome Dialog"
 
-def test_news(client):
+def test_news():
+    with flask_app.test_client() as c:
+        cats = ["Deutschland", "Crypto", "Russland"]
+        userName = "Simon"
+        place = "Stuttgart"
+        rv = c.post('/welcome', json={
+            'weatherLocation': place,
+            'userName': userName,
+            'newsCategories': cats
+        })
+        answer = briefing()
+        assert any(cat in answer for cat in cats)
 
-    with patch("welcome.src.datasources.get_news_data") as patched_news_data:
-        patched_news_data.return_value = ""
+def test_studenplan():
+     with flask_app.test_client() as c:
+        rv = c.post('/stundenplan', json={
+            "raplaLink": "https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhBUYcX7OIFJ2of49CgyjVbV"
+        })
+        answer = timetable()
+        assert "Vorlesung" in answer and not "Stundenplan" in answer
 
+def test_bad_timetable():
+     with flask_app.test_client() as c:
+        rv = c.post('/stundenplan', json={
+        })
+        answer = timetable()
+        assert not "Vorlesung" in answer and "Stundenplan" in answer
 
-@pytest.fixture
-def patched_requests(monkeypatch):
-    # store a reference to the old get method
-    old_get = requests.post
-    def mocked_post(uri, *args, **kwargs):
-        json = dict(
-        data = lambda: {'data': {'weatherLocation': 'Stuttgart'}},
-        )
-        
-    # finally, patch Requests.get with patched version
-    monkeypatch.setattr(requests, 'post', mocked_post)
-"""
+ 
