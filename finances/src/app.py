@@ -1,7 +1,6 @@
 from flask import Flask, request
 
-import finances.src.datasource
-from finances.src import datasource
+from .datasource import datasources
 
 app = Flask(__name__)
 
@@ -10,9 +9,9 @@ app = Flask(__name__)
 def briefing():
     answer = "Dein tägliches Finanz-Update.\n\nDay Gainers:\n"
 
-    day_gainers = finances.src.datasource.get_top_3_day_gainers()
+    day_gainers = datasources.get_top_3_day_gainers()
     for _, day_gainer in day_gainers.iterrows():
-        name, _, _ = datasource.get_ticker_info(day_gainer.Symbol)
+        name, _, _ = datasources.get_ticker_info(day_gainer.Symbol)
         answer += f"{name} ist ein Gainer mit {day_gainer['% Change']} % Zunahme.\n"
 
     answer += "\n" + favourites()
@@ -28,7 +27,7 @@ def crypto():
     public_binance_api_key = data["publicBinanceApiKey"]
     private_binance_api_key = data["privateBinanceApiKey"]
 
-    balances = datasource.get_binance_info(public_binance_api_key, private_binance_api_key)
+    balances = datasources.get_binance_info(public_binance_api_key, private_binance_api_key)
     balances_not_null = []
 
     for balance in balances:
@@ -65,8 +64,8 @@ def leading():
 @app.route("/wallstreetbets")
 def wallstreetbets():
     try:
-        most_discussed = datasource.get_most_discussed_stock()
-        name, value, currency = datasource.get_ticker_info(most_discussed["ticker"])
+        most_discussed = datasources.get_most_discussed_stock()
+        name, value, currency = datasources.get_ticker_info(most_discussed["ticker"])
 
         return f"Auf r/wallstreetbets wird heute {name} mit {most_discussed['no_of_comments']} Kommentaren als {most_discussed['sentiment']} angesehen. " \
                f"Der aktuelle Wert liegt bei  {value} {currency}. \n"
@@ -78,7 +77,7 @@ def wallstreetbets():
 @app.route("/nft")
 def nft():
     try:
-        name, collection, hours_ago, value = datasource.get_top_nft()
+        name, collection, hours_ago, value = datasources.get_top_nft()
         return f"{name} aus der Kollektion {collection} wurde vor {hours_ago} Stunden für {value} verkauft.\n"
     except Exception as e:
         print(e)
@@ -88,12 +87,10 @@ def nft():
 @app.route("/info/<ticker>")
 def ticker_info(ticker):
     try:
-        name, value, currency = datasource.get_ticker_info(ticker)
+        name, value, currency = datasources.get_ticker_info(ticker)
         return f"{name} liegt aktuell bei {value:.2f} {currency}. \n"
     except Exception as e:
         print(e)
         return "Die Daten für dieses Kürzel konnten nicht abgerufen werden.\n"
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8003, debug=True)
