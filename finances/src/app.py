@@ -5,7 +5,7 @@ from .datasource import datasources
 app = Flask(__name__)
 
 
-@app.route("/briefing", methods=['POST'])
+@app.route("/briefing", methods=["POST"])
 def briefing():
     answer = "Dein tägliches Finanz-Update.\n\nDay Gainers:\n"
 
@@ -14,14 +14,13 @@ def briefing():
         name, _, _ = datasources.get_ticker_info(day_gainer.Symbol)
         answer += f"{name} ist ein Gainer mit {day_gainer['% Change']} % Zunahme.\n"
 
-    answer += "\n" + favourites()
+    answer += "\n" + favourites(1)
     answer += "\n" + leading()
-    answer += "\n" + wallstreetbets()
 
     return answer
 
 
-@app.route("/crypto", methods=['POST'])
+@app.route("/crypto", methods=["POST"])
 def crypto():
     data = request.get_json()
     public_binance_api_key = data["publicBinanceApiKey"]
@@ -32,27 +31,40 @@ def crypto():
 
     for balance in balances:
         if float(balance["free"]) != 0:
-            balances_not_null.append(f" {balance['asset']}:\t{balance['free']} \n")
+            try:
+                _, value, currency = datasources.get_ticker_info(balance["asset"] + "-usd")
+            except Exception as e:
+                print(e)
+                value = "???"
+                currency = "USD"
+            balances_not_null.append(f"[+] {balance['asset'].strip()}: {value} {currency}")
 
     if balances_not_null:
-        return "Deine Kryptos aktuell:\n" + "\n".join(balances_not_null)
+        return "Deine Kryptos aktuell:\n" + ", ".join(balances_not_null)
 
     return "Du hast aktuell keine Kryptowährungen.\n"
 
 
-@app.route("/favourites", methods=['POST'])
-def favourites():
+@app.route("/favourites", methods=["POST"])
+def favourites(first_n_favorites: int = None):
     data = request.get_json()
     fav_stocks = data["stockList"]
 
-    answer = "Deine Favoriten: \n"
-    for ticker in fav_stocks:
+    if first_n_favorites == 1:
+        answer = "Dein 1. Favorit: \n"
+    else:
+        answer = "Deine Favoriten: \n"
+
+    if first_n_favorites is None:
+        first_n_favorites = len(fav_stocks)
+
+    for ticker in fav_stocks[:min(len(fav_stocks), first_n_favorites)]:
         answer += ticker_info(ticker)
 
     return answer
 
 
-@app.route("/leading", methods=['POST'])
+@app.route("/leading", methods=["POST"])
 def leading():
     data = request.get_json()
     stock_index = data["stockIndex"]
@@ -61,7 +73,7 @@ def leading():
     return answer
 
 
-@app.route("/wallstreetbets", methods=['POST'])
+@app.route("/wallstreetbets", methods=["POST"])
 def wallstreetbets():
     try:
         most_discussed = datasources.get_most_discussed_stock()
@@ -74,7 +86,7 @@ def wallstreetbets():
         return "Wallstreetbets kann gerade nicht abgerufen werden"
 
 
-@app.route("/nft", methods=['POST'])
+@app.route("/nft", methods=["POST"])
 def nft():
     try:
         name, collection, hours_ago, value = datasources.get_top_nft()
