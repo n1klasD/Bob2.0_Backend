@@ -54,7 +54,9 @@ def get_motivational_quote():
     }
 
     response = requests.request("POST", url, json=payload, headers=headers)
-    return response.text.strip("\n")
+    if not response.ok:
+        return ""
+    return response.text.replace("\n", "")
 
 
 def get_weather_data(city):
@@ -92,7 +94,7 @@ def get_weather_data(city):
 def get_rapla_data(key):
     rapla = "https://rapla.dhbw-stuttgart.de/rapla?key="
     date = "today"
-    link = rapla + key
+    link = key
 
     if date == "today":
         now = datetime.datetime.now()
@@ -114,22 +116,23 @@ def get_rapla_data(key):
 
     # integer representation of the day in the week, where 0 is monday and 6 is sunday
     weekday = now.weekday()
-
     if weekday > 4:
         # saturday or sunday
 
         return ("Heute hast du keine Vorlesungen.")
 
     # get html content and parse it with bs4
-    webpage = requests.get(link)
+    webpage = requests.get(link,headers={'User-Agent' : 'Mozilla/5.0'})
+    
     soup = BeautifulSoup(webpage.text, "html.parser")
-
+    
     answer = "Heute hast du diese Vorlesungen: "
 
     weekdays_german = ("Mo", "Di", "Mi", "Do", "Fr")
 
     week_blocks = soup.find_all("td", class_="week_block")
     for week_block in week_blocks:
+        
         # get all days plan in matching week and iterte until the right one is found
         info = week_block.a.get_text().split("\n")
         time = info[1].split(" ")
@@ -141,9 +144,7 @@ def get_rapla_data(key):
         if "Personen:" in info:
             person += " bei " + info[info.index("Personen:") + 1]
 
-        answer += time[2][:11] + " : " + course + person[:-1] + "\n"
+        answer += time[2][:11] + " : " + course + person[:-1] + ". "
     if answer == "Heute hast du diese Vorlesungen: ":
         return "Heute hast du keine Vorlesungen."
     return answer
-
-

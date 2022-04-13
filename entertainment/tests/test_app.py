@@ -1,11 +1,5 @@
-from distutils.log import Log
-import pytest
-from mock import patch, Mock
-from flask import request
-import time
 
 from ..src import app as flask_app, movies, series, matches, races, jokes
-from ..src import datasource
 
 
 def test_horror_action_movie():
