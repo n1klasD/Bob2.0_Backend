@@ -5,7 +5,7 @@ from .datasource import datasources
 app = Flask(__name__)
 
 
-@app.route("/briefing", methods=['POST'])
+@app.route("/briefing", methods=["POST"])
 def briefing():
     answer = "Dein tägliches Finanz-Update.\n\nDay Gainers:\n"
 
@@ -20,7 +20,7 @@ def briefing():
     return answer
 
 
-@app.route("/crypto", methods=['POST'])
+@app.route("/crypto", methods=["POST"])
 def crypto():
     data = request.get_json()
     public_binance_api_key = data["publicBinanceApiKey"]
@@ -31,15 +31,20 @@ def crypto():
 
     for balance in balances:
         if float(balance["free"]) != 0:
-            balances_not_null.append(f"[+] {balance['asset']} \n")
+            try:
+                _, value, _ = datasources.get_ticker_info(balance["asset"] + "-usd")
+            except Exception as e:
+                print(e)
+                value = "???"
+            balances_not_null.append(f"[+] {balance['asset'].strip()}: {value}$")
 
     if balances_not_null:
-        return "Deine Kryptos aktuell:\n" + ", ".join(balances_not_null)
+        return "Deine Kryptos aktuell:" + "\n".join(balances_not_null)
 
     return "Du hast aktuell keine Kryptowährungen.\n"
 
 
-@app.route("/favourites", methods=['POST'])
+@app.route("/favourites", methods=["POST"])
 def favourites(first_n_favorites: int = None):
     data = request.get_json()
     fav_stocks = data["stockList"]
@@ -58,7 +63,7 @@ def favourites(first_n_favorites: int = None):
     return answer
 
 
-@app.route("/leading", methods=['POST'])
+@app.route("/leading", methods=["POST"])
 def leading():
     data = request.get_json()
     stock_index = data["stockIndex"]
@@ -67,7 +72,7 @@ def leading():
     return answer
 
 
-@app.route("/wallstreetbets", methods=['POST'])
+@app.route("/wallstreetbets", methods=["POST"])
 def wallstreetbets():
     try:
         most_discussed = datasources.get_most_discussed_stock()
@@ -80,7 +85,7 @@ def wallstreetbets():
         return "Wallstreetbets kann gerade nicht abgerufen werden"
 
 
-@app.route("/nft", methods=['POST'])
+@app.route("/nft", methods=["POST"])
 def nft():
     try:
         name, collection, hours_ago, value = datasources.get_top_nft()
