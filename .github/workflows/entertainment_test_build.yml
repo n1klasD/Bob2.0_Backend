@@ -36,8 +36,8 @@ jobs:
       - name: Inject environment file
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          envkey_imdb_key: ${{ secrets.IMDB_KEY }}
-          envkey_x_auth_token: ${{ secrets.X_AUTH_TOKEN }}
+          envkey_IMDB_KEY: ${{ secrets.IMDB_KEY }}
+          envkey_X_AUTH_TOKEN: ${{ secrets.X_AUTH_TOKEN }}
           directory: entertainment/src
           file_name: .env
           fail_on_empty: false
