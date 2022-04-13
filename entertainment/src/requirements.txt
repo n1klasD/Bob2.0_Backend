@@ -1,2 +1,5 @@
 flask
 imdbpy
+requests
+xmltodict
+python-dotenv

@@ -91,7 +91,7 @@ def get_future_football_match_by_team(favourite_team: str):
     if favourite_team_id != -1:
         url = "https://api.football-data.org/v2/teams/"+str(favourite_team_id)+"/matches/"
         headers = {
-            'X-Auth-Token': x_auth_token
+            'X-Auth-Token': get_API_Key("x_auth_token")
         }
         response = requests.get(url, headers=headers)
         data = response.json()
