@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 home = "homeLocation"
 work = "workingLocation"
-sprit = "gasolineType"
+fuel = "gasolineType"
 
 @app.route('/')
 def index():
@@ -15,7 +15,9 @@ def index():
 @app.route('/gasStations', methods=["POST"])
 def gasStations():
     data = request.get_json()
-    stations = datasources.get_Gas_Stations_Rad(data[home])
+    if(data[fuel] == "Benzin"):
+        data[fuel] = "e5"
+    stations = datasources.get_Gas_Stations_Rad(data[home], data[fuel])
     return stations
 
 @app.route('/distance', methods=["POST"])
@@ -27,5 +29,6 @@ def getdistance():
 @app.route('/route', methods=["POST"])
 def get_Route():
     data = request.get_json()
+    weather = datasources.get_weather_data(data[home])
     route = datasources.get_Route(data[home], data[work])
-    return route
+    return weather + "\n" + route

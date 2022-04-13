@@ -1,6 +1,6 @@
-from ..src import app as flask_app, get_Route, gasStations, getdistance
+from .. src import app as flask_app, get_Route
 
-def test_good_weather():
+def test_good_route():
     with flask_app.test_client() as c:
         home = "Stuttgart"
         work = "Böblingen"
