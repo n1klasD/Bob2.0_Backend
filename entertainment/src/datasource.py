@@ -135,7 +135,7 @@ def convert_datetime(next_match_datetime):
     return date, time
 
 
-def get_future_race(next_year):
+def get_future_race(next_year=False):
     current_date = date.today()
     current_year = current_date.year
     url = "http://ergast.com/api/f1/"
@@ -177,4 +177,6 @@ def get_joke():
         delivery = data['delivery']
         return setup+"\n"+delivery
     return "No joke found"
+
+print(get_future_race())
 
