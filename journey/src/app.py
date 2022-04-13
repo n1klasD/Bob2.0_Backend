@@ -27,7 +27,7 @@ def getdistance():
     return distances
 
 @app.route('/route', methods=["POST"])
-def get_Route():
+def getRoute():
     data = request.get_json()
     weather = get_weather_data(data[home])
     route = get_Route(data[home], data[work])
