@@ -2,4 +2,4 @@ flask
 imdbpy
 requests
 xmltodict
-dotenv
+python-dotenv
