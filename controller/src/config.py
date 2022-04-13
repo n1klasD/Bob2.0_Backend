@@ -18,6 +18,11 @@ usecases = [
                 example_questions=["Wie wird das Wetter heute ?"]
             ),
             Question(
+                route="/news",
+                keywords=["news", "Nachrichten", "Neuigkeiten"],
+                example_questions=["Zeig mir aktuelle Nachrichten!", "Was gibt es für neue News?"]
+            ),
+            Question(
                 route="/stundenplan",
                 keywords=["stundenplan", "rapla", "vorlesungen", "vorlesung"],
                 example_questions=["Wann habe ich heute Vorlesung?", "Was steht im Stundenplan?"]
