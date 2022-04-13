@@ -1,6 +1,6 @@
 #from crypt import methods
 from flask import Flask, request
-from . import datasources
+from .datasources import get_Distance, get_Gas_Stations_Rad, get_Route, get_weather_data
 
 app = Flask(__name__)
 
@@ -17,18 +17,18 @@ def gasStations():
     data = request.get_json()
     if(data[fuel] == "Benzin"):
         data[fuel] = "e5"
-    stations = datasources.get_Gas_Stations_Rad(data[home], data[fuel])
+    stations = get_Gas_Stations_Rad(data[home], data[fuel])
     return stations
 
 @app.route('/distance', methods=["POST"])
 def getdistance():
     data = request.get_json()
-    distances = datasources.get_Distance(data[home], data[work])
+    distances = get_Distance(data[home], data[work])
     return distances
 
 @app.route('/route', methods=["POST"])
 def get_Route():
     data = request.get_json()
-    weather = datasources.get_weather_data(data[home])
-    route = datasources.get_Route(data[home], data[work])
+    weather = get_weather_data(data[home])
+    route = get_Route(data[home], data[work])
     return weather + "\n" + route

@@ -21,11 +21,11 @@ def get_Gas_Stations_Rad(city, fuel):
     }
     data = json.load(io.BytesIO(requests.request("GET", url, headers=headers, params=querystring).content.replace(b"'", b'"')))
     response = "Hier die nächsten Tankstellen in dieser Stadt:"
-    if(len(data['stations'])):
+    if(len(data['stations'])<3):
         for i in data['stations']:
             response += "\n" + i['name'] + ", " + i['street'] + " " + i['houseNumber'] + "\nPreis: " + str(i['price'])
     else:
-        for i in data['stations'][:2]:
+        for i in data['stations'][:3]:
             response += "\n" + i['name'] + ", " + i['street'] + " " + i['houseNumber'] + "\nPreis: " + str(i['price'])
     return response
 
