@@ -14,13 +14,13 @@ services:
       - "8001:8001"
     networks:
       - internal
-  #entertainment:
-  #  image: 1646552/entertainment:latest
-  #  container_name: "entertainment"
-  #  ports:
-  #    - "8002:8002"
-  #  networks:
-  #    - internal
+  entertainment:
+    image: 1646552/entertainment:latest
+    container_name: "entertainment"
+    ports:
+      - "8002:8002"
+    networks:
+      - internal
   finances:
     image: 1646552/finances:latest
     container_name: "finances"
@@ -28,13 +28,13 @@ services:
       - "8003:8003"
     networks:
       - internal
-  #journey:
-  #  image: 1646552/journey:latest
-  #  container_name: "journey"
-  #  ports:
-  #    - "8004:8004"
-  #  networks:
-  #    - internal
+  journey:
+    image: 1646552/journey:latest
+    container_name: "journey"
+    ports:
+      - "8004:8004"
+    networks:
+      - internal
 networks:
   internal:
 

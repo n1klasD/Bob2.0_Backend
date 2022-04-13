@@ -16,15 +16,15 @@ def get_API_Key(key):
 
 
 def get_metadata(movie_id):
-    api_key = get_API_Key("imdb_key")
+    api_key = get_API_Key("IMDB_KEY")
     url = "https://imdb-api.com/API/Title/"+api_key+"/"+movie_id
     response = requests.get(url)
     movie_metadata = response.json()
     return movie_metadata
 
 
-def search_movie_by_genre(genres: list[str]):
-    api_key = get_API_Key("imdb_key")
+def search_movie_by_genre(genres):
+    api_key = get_API_Key("IMDB_KEY")
     movies = []
     url = "https://imdb-api.com/API/AdvancedSearch/"+api_key+"/?genres="
     for genre in genres:
@@ -53,8 +53,8 @@ def search_movie_by_genre(genres: list[str]):
         return None, None, None
 
 
-def search_series_by_genre(genres: list[str]):
-    api_key = get_API_Key("imdb_key")
+def search_series_by_genre(genres):
+    api_key = get_API_Key("IMDB_KEY")
     series_list = []
     url = "https://imdb-api.com/API/AdvancedSearch/"+api_key+"/?genres="
     for genre in genres:
@@ -91,7 +91,7 @@ def get_future_football_match_by_team(favourite_team: str):
     if favourite_team_id != -1:
         url = "https://api.football-data.org/v2/teams/"+str(favourite_team_id)+"/matches/"
         headers = {
-            'X-Auth-Token': x_auth_token
+            'X-Auth-Token': get_API_Key("X_AUTH_TOKEN")
         }
         response = requests.get(url, headers=headers)
         data = response.json()
@@ -123,7 +123,7 @@ def get_team_id(teams_list, team):
 
 
 def get_bundesliga():
-    x_auth_token = get_API_Key("x_auth_token")
+    x_auth_token = get_API_Key("X_AUTH_TOKEN")
     url = "https://api.football-data.org/v2/competitions/2002/teams"
     headers = {
         'X-Auth-Token': x_auth_token

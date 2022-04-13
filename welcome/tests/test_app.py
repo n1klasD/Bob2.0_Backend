@@ -8,7 +8,6 @@ from ..src import app as flask_app, weather, briefing, index, timetable
 from ..src import datasources
 
 
-
 def test_good_weather():
     with flask_app.test_client() as c:
         place = "Stuttgart"
