@@ -128,10 +128,7 @@ def get_weather_data(city,more_data=False):
             diff = "kälter"
         else:
             diff = "wärmer"
-        answer = f"Das Wetter für {text['city']['name']}:\
-            Momentan hat es {current} Grad. Die durchschnittliche Temperatur heute liegt bei {today['temp']['average_max']} Grad.\
-            Die Luftfeuchtigkeit liegt bei {today['humidity']}% und der Luftdruck bei {today['pressure']}hPa.\
-            Morgen wird das Wetter {diff} als heute mit einem Durchschnitt von {text['list'][1]['temp']['average_max']} Grad." 
+        answer = f"Das Wetter für {text['city']['name']}: Momentan hat es {current} Grad. Die durchschnittliche Temperatur heute liegt bei {today['temp']['average_max']} Grad. Die Luftfeuchtigkeit liegt bei {today['humidity']}% und der Luftdruck bei {today['pressure']}hPa. Morgen wird das Wetter {diff} als heute mit einem Durchschnitt von {text['list'][1]['temp']['average_max']} Grad." 
         return answer
     else:
         return "Es ist etwas schief gelaufen."
