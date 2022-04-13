@@ -88,7 +88,43 @@ usecases = [
                 example_questions=["Gib mir die Wegbeschreibung zu meiner Arbeit.", "Wie ist die Route zu meiner Arbeit?"]
             )
         ]
-    )
+    ),
+    Usecase(
+        name="entertainment",
+        questions=[
+            Question(
+                route="/briefing",
+                keywords=["Entertainment", "Unterhaltung", "Abend", "unterhalten"],
+                example_questions=["Was könnte ich heute Abend schauen?", "Schlage mir ein Abendprogramm vor"]
+            ),
+            Question(
+                route="/movies",
+                keywords=["Film"],
+                example_questions=["Schlage mir einen Film vor.", "Welchen Film könnte ich heute Abend schauen?"]
+            ),
+            Question(
+                route="/series",
+                keywords=["Serie"],
+                example_questions=["Schlage mir eine Serie vor.", "Welche Serie könnte ich heute Abend schauen?"]
+            ),
+            Question(
+                route="/football",
+                keywords=["Fußball", "Spiel", "Verein", "Bundesliga"],
+                example_questions=["Was steht in der Bundesliga an?", "Wann spielt mein Lieblingsverein wieder?"]
+            ),
+            Question(
+                route="/formulaOne",
+                keywords=["Formel", "Rennen", "Circuit"],
+                example_questions=["Welche Rennen stehen an?", "Was passiert in der Formel 1?"]
+            ),
+            Question(
+                route="/comedy",
+                keywords=["Witz", "lustig", "funny", "joke", "lach"],
+                example_questions=["Erzähle mir einen Witz", "Sag etwas lustiges", "Bringe mich zum Lachen"]
+            )
+
+    ]
+)
 ]
 
 no_answer = [
