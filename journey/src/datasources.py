@@ -1,5 +1,3 @@
-from asyncio.windows_events import NULL
-from wsgiref import headers
 import requests
 import json
 import io
@@ -11,13 +9,15 @@ def __init__(self) -> None:
     self.tkapikey = "9775658e-0a17-f909-9013-dd795e16e340"
     self.home = "Etzelstr."
 
+
 def get_Gas_Stations_Rad(city, fuel):
     url = "https://creativecommons.tankerkoenig.de/json/list.php?"
     apikey = "9775658e-0a17-f909-9013-dd795e16e340"
     if not getCoords(city):
         return "Kein valider Ort angegeben."
-    lat, lng  = getCoords(city)
-    querystring = {"lat": lat, "lng":lng, "rad":"3", "type":fuel, "sort":"price", "apikey":"9775658e-0a17-f909-9013-dd795e16e340"} 
+    lat, lng = getCoords(city)
+    querystring = {"lat": lat, "lng": lng, "rad": "3", "type": fuel, "sort": "price",
+                   "apikey": "9775658e-0a17-f909-9013-dd795e16e340"}
     headers = {
         "TK-API-Host": "creativecommons.tankerkoenig.de",
         "TK-API-Key": "9775658e-0a17-f909-9013-dd795e16e340"
@@ -27,7 +27,8 @@ def get_Gas_Stations_Rad(city, fuel):
         return "Keine valide Spritsorte ausgewählt"
     data = json.load(io.BytesIO(data.content.replace(b"'", b'"')))
     response = "Hier die nächsten Tankstellen in dieser Stadt:"
-    if(len(data['stations'])<3):
+    
+    if len(data['stations']) < 3:
         for i in data['stations']:
             response += "\n" + i['name'] + ", " + i['street'] + " " + i['houseNumber'] + "\nPreis: " + str(i['price'])
     else:
@@ -35,18 +36,19 @@ def get_Gas_Stations_Rad(city, fuel):
             response += "\n" + i['name'] + ", " + i['street'] + " " + i['houseNumber'] + "\nPreis: " + str(i['price'])
     return response
 
+
 def getCoords(cityname):
-    address= cityname
+    address = cityname
     geolocator = Nominatim(user_agent="Your_Name")
     location = geolocator.geocode(address)
+
     if not location:
-        return NULL
+        return None
     else:
         return location.latitude, location.longitude
 
 
 def get_weather_data(city):
-
     url = "https://community-open-weather-map.p.rapidapi.com/climate/month"
 
     querystring = {"q": city, "lat": "0", "lon": "0", "lang": "de", "units": "metric"}
@@ -57,7 +59,7 @@ def get_weather_data(city):
     }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
-    text = json.loads(response.text)   
+    text = json.loads(response.text)
     if not response.ok:
         return "Kein valider Ort angegeben."
 
@@ -76,6 +78,7 @@ def get_weather_data(city):
     # return f"Heute wird es im Durchschnitt {str(text['list'][0]['temp']['average'])} Grad"
     return f"Heute wird es in {str(text['city']['name'])} im Durchschnitt {str(today['temp']['average'])} Grad mit {humidity} Luftfeuchtigkeit. {clothing}"
 
+
 def getmapurl(vehicle):
     switcher = {
         "Auto": "https://api.mapbox.com/directions/v5/mapbox/driving/",
@@ -84,8 +87,8 @@ def getmapurl(vehicle):
     }
     return switcher[vehicle]
 
-def get_Route(origin, destination, vehicle):
 
+def get_Route(origin, destination, vehicle):
     url = getmapurl(vehicle)
     accesstoken = "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
 
@@ -102,7 +105,8 @@ def get_Route(origin, destination, vehicle):
         "MB-Access-Token": "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
     }
 
-    querystring = {"geometries": "geojson", "access_token": accesstoken, "steps":"true", "language":"de", "voice_units":"metric", "voice_instructions":"true"}
+    querystring = {"geometries": "geojson", "access_token": accesstoken, "steps": "true", "language": "de",
+                   "voice_instructions": "true"}
 
     data = requests.request("GET", url, headers=headers, params=querystring)
     data = json.load(io.BytesIO(data.content.replace(b"'", b'"')))
@@ -112,6 +116,7 @@ def get_Route(origin, destination, vehicle):
             response += j['announcement'] + "\n"
 
     return response
+
 
 def get_Distance(origin, destination, vehicle):
     url = getmapurl(vehicle)
@@ -130,12 +135,17 @@ def get_Distance(origin, destination, vehicle):
         "MB-Access-Token": "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
     }
 
-    querystring = {"geometries": "geojson", "access_token": accesstoken, "steps":"true", "language":"de", "voice_instructions":"true"}
+    querystring = {"geometries": "geojson", "access_token": accesstoken, "steps": "true", "language": "de",
+                   "voice_instructions": "true"}
 
-    data = json.load(io.BytesIO(requests.request("GET", url, headers=headers, params=querystring).content.replace(b"'", b'"')))
+    data = json.load(
+        io.BytesIO(requests.request("GET", url, headers=headers, params=querystring).content.replace(b"'", b'"')))
 
-    response = "Dein Ziel " + destination + " ist " + str(timedelta(seconds=(data['routes'][0]['legs'][0]["duration"]))).split(".")[0] + " Stunden und " + str(round(data['routes'][0]['legs'][0]["distance"]/1000, 1)) + " Km entfernt."
+    response = "Dein Ziel ist " + str(timedelta(seconds=(data['routes'][0]['legs'][0]["duration"]))).split(".")[
+        0] + " Stunden und " + str(data['routes'][0]['legs'][0]["distance"] / 1000) + " Km entfernt."
+        
     return response
+
 
 def get_Bahn(self):
     url = "http://api.deutschebahn.com/free1bahnql/v1"
