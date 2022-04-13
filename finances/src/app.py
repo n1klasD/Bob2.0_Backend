@@ -14,9 +14,8 @@ def briefing():
         name, _, _ = datasources.get_ticker_info(day_gainer.Symbol)
         answer += f"{name} ist ein Gainer mit {day_gainer['% Change']} % Zunahme.\n"
 
-    answer += "\n" + favourites()
+    answer += "\n" + favourites(1)
     answer += "\n" + leading()
-    answer += "\n" + wallstreetbets()
 
     return answer
 
@@ -32,21 +31,28 @@ def crypto():
 
     for balance in balances:
         if float(balance["free"]) != 0:
-            balances_not_null.append(f" {balance['asset']}:\t{balance['free']} \n")
+            balances_not_null.append(f"[+] {balance['asset']} \n")
 
     if balances_not_null:
-        return "Deine Kryptos aktuell:\n" + "\n".join(balances_not_null)
+        return "Deine Kryptos aktuell:\n" + ", ".join(balances_not_null)
 
     return "Du hast aktuell keine Kryptowährungen.\n"
 
 
 @app.route("/favourites", methods=['POST'])
-def favourites():
+def favourites(first_n_favorites: int = None):
     data = request.get_json()
     fav_stocks = data["stockList"]
 
-    answer = "Deine Favoriten: \n"
-    for ticker in fav_stocks:
+    if first_n_favorites == 1:
+        answer = "Dein 1. Favorit: \n"
+    else:
+        answer = "Deine Favoriten: \n"
+
+    if first_n_favorites is None:
+        first_n_favorites = len(fav_stocks)
+
+    for ticker in fav_stocks[:min(len(fav_stocks), first_n_favorites)]:
         answer += ticker_info(ticker)
 
     return answer
