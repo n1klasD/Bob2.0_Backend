@@ -10,7 +10,16 @@ def __init__(self) -> None:
     self.home = "Etzelstr."
 
 
-def get_Gas_Stations_Rad(city, fuel):
+def get_Gas_Stations_Rad(city, fuell):
+    if fuell == "Super E10":
+        fuel = "e10"
+    elif fuell == "Super":
+        fuel = "e5"
+    elif fuell == "Diesel":
+        fuel = "diesel"
+    else:
+        fuel = ""
+
     url = "https://creativecommons.tankerkoenig.de/json/list.php?"
     apikey = "9775658e-0a17-f909-9013-dd795e16e340"
     if not getCoords(city):
@@ -26,14 +35,14 @@ def get_Gas_Stations_Rad(city, fuel):
     if not data.ok:
         return "Keine valide Spritsorte ausgewählt"
     data = json.load(io.BytesIO(data.content.replace(b"'", b'"')))
-    response = "Hier die nächsten Tankstellen in dieser Stadt:"
+    response = f"Hier die nächsten Tankstellen in dieser Stadt mit Preisen für {fuell}:"
     
     if len(data['stations']) < 3:
         for i in data['stations']:
-            response += "\n" + i['name'] + ", " + i['street'] + " " + i['houseNumber'] + "\nPreis: " + str(i['price'])
+            response += "\n" + i['name'] + ", " + i['street'].title() + " " + i['houseNumber'] + ".\nPreis: " + str(i['price']).replace(".", ",") + " €."
     else:
         for i in data['stations'][:3]:
-            response += "\n" + i['name'] + ", " + i['street'] + " " + i['houseNumber'] + "\nPreis: " + str(i['price'])
+            response += "\n" + i['name'] + ", " + i['street'].title() + " " + i['houseNumber'] + ".\nPreis: " + str(i['price']).replace(".", ",") + " €."
     return response
 
 

@@ -1,4 +1,3 @@
-#from crypt import methods
 from flask import Flask, request
 from .datasources import get_Distance, get_Gas_Stations_Rad, get_Route, get_weather_data
 
@@ -7,30 +6,27 @@ app = Flask(__name__)
 home = "homeLocation"
 work = "workingLocation"
 fuel = "gasolineType"
-vehicle = "preferedVehicle"
+vehicle = "preferredVehicle"
 
 
 @app.route('/')
 def index():
     return "Hello from journey dialog"
 
+
 @app.route('/gasStations', methods=["POST"])
 def gasStations():
     data = request.get_json()
-    if(data[fuel] == "Super E10"):
-        data[fuel] = "e10"
-    if(data[fuel] == "Super"):
-        data[fuel] = "e5"
-    if(data[fuel] == "Diesel"):
-        data[fuel] = "diesel"
     stations = get_Gas_Stations_Rad(data[home], data[fuel])
     return stations
+
 
 @app.route('/distance', methods=["POST"])
 def getdistance():
     data = request.get_json()
     distances = get_Distance(data[home], data[work], data[vehicle])
     return distances
+
 
 @app.route('/route', methods=["POST"])
 def getRoute():
