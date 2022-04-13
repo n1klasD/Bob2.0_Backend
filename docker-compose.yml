@@ -14,13 +14,13 @@ services:
       - "8001:8001"
     networks:
       - internal
-  #entertainment:
-  #  image: 1646552/entertainment:latest
-  #  container_name: "entertainment"
-  #  ports:
-  #    - "8002:8002"
-  #  networks:
-  #    - internal
+  entertainment:
+    image: 1646552/entertainment:latest
+    container_name: "entertainment"
+    ports:
+      - "8002:8002"
+    networks:
+      - internal
   finances:
     image: 1646552/finances:latest
     container_name: "finances"
