@@ -16,14 +16,17 @@ def get_API_Key(key):
 
 
 def get_news_data(category,all_news=False):
-
+    
+    #API info
     url = "https://free-news.p.rapidapi.com/v1/search"
     headers = {
         'x-rapidapi-host': "free-news.p.rapidapi.com",
         'x-rapidapi-key': get_API_Key('RAPID_KEY')
         }
 
+    #check if briefing or news route
     if not all_news:
+        #select random category from list
         category = random.choice(category)
         querystring = {"q":category,"lang":"de"}
 
@@ -31,6 +34,7 @@ def get_news_data(category,all_news=False):
         response = requests.request("GET", url, headers=headers, params=querystring)
         text = json.loads(response.text)
     
+        #check API response & Filter answers
         if not response.ok:
             return (f"{category}: Keine Neuigkeiten.")
         elif not 'articles' in text:
@@ -41,8 +45,10 @@ def get_news_data(category,all_news=False):
 
         return(f"{category}: {text['title']} ({text['author']}).")
     
+    #if /news route
     if all_news:
         answer = "Hier sind die heutigen News: \n"
+        #get info for every category
         for cat in category:
             time.sleep(1)
             querystring = {"q":cat,"lang":"de"}
