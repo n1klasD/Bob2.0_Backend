@@ -4,7 +4,7 @@ import pytest
 from mock import patch, Mock
 from flask import request
 
-from ..src import app as flask_app, weather, briefing, index, timetable
+from ..src import app as flask_app, weather, briefing, index, timetable, news
 from ..src import datasources
 
 
@@ -84,5 +84,23 @@ def test_bad_timetable():
         })
         answer = timetable()
         assert not "Vorlesung" in answer and "Stundenplan" in answer
+
+def test_news_standalone():
+    cats = ["Deutschland","Sport"]
+    with flask_app.test_client() as c:
+        rv = c.post('/news', json={
+            'newsCategories': cats
+        })
+        answer = news()
+        assert (cat in answer for cat in cats) and not "Keine Neuigkeiten." in answer
+
+def test_news_standalone():
+    cats = ["irgendwasblalala"]
+    with flask_app.test_client() as c:
+        rv = c.post('/news', json={
+            'newsCategories': cats
+        })
+        answer = news()
+        assert (cat in answer for cat in cats) and "Keine Neuigkeiten." in answer
 
  

@@ -17,6 +17,8 @@ def gasStations():
     data = request.get_json()
     if(data[fuel] == "Benzin"):
         data[fuel] = "e5"
+    if(data[fuel] == "Diesel"):
+        data[fuel] = "diesel"
     stations = get_Gas_Stations_Rad(data[home], data[fuel])
     return stations
 

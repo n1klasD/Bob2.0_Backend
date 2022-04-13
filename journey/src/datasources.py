@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from wsgiref import headers
 import requests
 import json
@@ -13,13 +14,16 @@ def __init__(self) -> None:
 def get_Gas_Stations_Rad(city, fuel):
     url = "https://creativecommons.tankerkoenig.de/json/list.php?"
     apikey = "9775658e-0a17-f909-9013-dd795e16e340"
+    if not getCoords(city):
+        return "Kein valider Ort angegeben."
     lat, lng  = getCoords(city)
     querystring = {"lat": lat, "lng":lng, "rad":"3", "type":fuel, "sort":"price", "apikey":"9775658e-0a17-f909-9013-dd795e16e340"} 
     headers = {
         "TK-API-Host": "creativecommons.tankerkoenig.de",
         "TK-API-Key": "9775658e-0a17-f909-9013-dd795e16e340"
     }
-    data = json.load(io.BytesIO(requests.request("GET", url, headers=headers, params=querystring).content.replace(b"'", b'"')))
+    data = requests.request("GET", url, headers=headers, params=querystring)
+    data = json.load(io.BytesIO(data.content.replace(b"'", b'"')))
     response = "Hier die nächsten Tankstellen in dieser Stadt:"
     if(len(data['stations'])<3):
         for i in data['stations']:
@@ -33,7 +37,10 @@ def getCoords(cityname):
     address= cityname
     geolocator = Nominatim(user_agent="Your_Name")
     location = geolocator.geocode(address)
-    return location.latitude, location.longitude
+    if not location:
+        return NULL
+    else:
+        return location.latitude, location.longitude
 
 
 def get_weather_data(city):
@@ -71,6 +78,9 @@ def get_Route(origin, destination):
     url = "https://api.mapbox.com/directions/v5/mapbox/driving/"
     accesstoken = "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
 
+    if not getCoords(origin) or not getCoords(destination):
+        return "Mindestens eine der Angaben ist kein valider Ort"
+
     origin_lat, origin_lng = getCoords(origin)
     destination_lat, destination_lng = getCoords(destination)
 
@@ -83,7 +93,8 @@ def get_Route(origin, destination):
 
     querystring = {"geometries": "geojson", "access_token": accesstoken, "steps":"true", "language":"de", "voice_instructions":"true"}
 
-    data = json.load(io.BytesIO(requests.request("GET", url, headers=headers, params=querystring).content.replace(b"'", b'"')))
+    data = requests.request("GET", url, headers=headers, params=querystring)
+    data = json.load(io.BytesIO(data.content.replace(b"'", b'"')))
     response = "Ich habe folgende Route für dich:\n"
     for i in data['routes'][0]['legs'][0]['steps']:
         for j in i['voiceInstructions']:
@@ -94,6 +105,9 @@ def get_Route(origin, destination):
 def get_Distance(origin, destination):
     url = "https://api.mapbox.com/directions/v5/mapbox/driving/"
     accesstoken = "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
+
+    if not getCoords(origin) or not getCoords(destination):
+        return "Mindestens eine der Angaben ist kein valider Ort"
 
     origin_lat, origin_lng = getCoords(origin)
     destination_lat, destination_lng = getCoords(destination)
