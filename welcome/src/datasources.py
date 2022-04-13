@@ -41,7 +41,7 @@ def get_news_data(category,all_news=False):
     if all_news:
         answer = "Hier sind die heutigen News: \n"
         for cat in category:
-            time.sleep(0.7)
+            time.sleep(1)
             querystring = {"q":cat,"lang":"de"}
             response = requests.request("GET", url, headers=headers, params=querystring)
             text = json.loads(response.text)
