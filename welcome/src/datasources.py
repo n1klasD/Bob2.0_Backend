@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 import random
 
+
 def get_API_Key(key):
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
