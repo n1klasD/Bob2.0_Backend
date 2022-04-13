@@ -1,6 +1,6 @@
 from flask import Flask, request
 from .datasource import search_movie_by_genre, search_series_by_genre, get_future_race, \
-    get_future_football_match_by_team
+    get_future_football_match_by_team, get_joke
 
 app = Flask(__name__)
 
@@ -50,6 +50,15 @@ def races():
     race_name, circuit_name, race_date, race_time = get_future_race(next_year=False)
     return "Als nächstes findet der " + race_name + " (" + circuit_name + ") am " + race_date + " um " + race_time + \
            " Uhr statt."
+
+
+@app.route("/comedy", methods=['POST'])
+def jokes():
+    data = request.get_json()
+    joke = get_joke()
+    if joke != "No joke found":
+        return joke
+    return "Leider habe ich keinen Witz gefunden."
 
 
 if __name__ == "__main__":

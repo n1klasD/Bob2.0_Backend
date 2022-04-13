@@ -4,7 +4,7 @@ from mock import patch, Mock
 from flask import request
 import time
 
-from ..src import app as flask_app, movies, series, matches, races
+from ..src import app as flask_app, movies, series, matches, races, jokes
 from ..src import datasource
 
 
@@ -95,3 +95,12 @@ def test_races():
         })
         answer = races()
         assert "Als nächstes" in answer and ":" in answer
+
+
+def test_jokes():
+    with flask_app.test_client() as c:
+        rv = c.post('/comedy', json={
+
+        })
+        answer = jokes()
+        assert "Leider" not in answer
