@@ -7,7 +7,7 @@ app = Flask(__name__)
 userName = "userName"
 rapla = "raplaLink"
 city = "weatherLocation"
-news = "newsCategories"
+newscats = "newsCategories"
 
 
 @app.route('/')
@@ -29,7 +29,7 @@ def briefing():
     return f"Guten Morgen {data[userName]}.\
     {weather}\
     {stundenplan}\
-    Was du vielleicht verpasst hast: {get_news_data(data[news])}\
+    Was du vielleicht verpasst hast: {get_news_data(data[newscats])}\
     Und vergiss nicht: {get_motivational_quote()}"
 
 
@@ -52,4 +52,12 @@ def timetable():
     if not rapla in data:
         return "Kein Stundenplan gesetzt."
     answer = get_rapla_data(data[rapla])
+    return answer
+
+@app.route('/news', methods=["POST"])
+def news():
+    data =request.get_json()
+    if not newscats in data:
+        return "Du hast noch keine News Kategorien ausgewählt."
+    answer = get_news_data(data[newscats], True)
     return answer

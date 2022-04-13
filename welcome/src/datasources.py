@@ -5,7 +5,7 @@ import json
 import os
 from dotenv import load_dotenv
 import random
-
+import time
 
 def get_API_Key(key):
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
@@ -15,30 +15,52 @@ def get_API_Key(key):
     return os.getenv(key)
 
 
-def get_news_data(category):
+def get_news_data(category,all_news=False):
 
     url = "https://free-news.p.rapidapi.com/v1/search"
-    if(category is None):
-        category = "News"
-    else:
-        category = random.choice(category)
-    querystring = {"q":category,"lang":"de"}
-
     headers = {
         'x-rapidapi-host': "free-news.p.rapidapi.com",
         'x-rapidapi-key': get_API_Key('RAPID_KEY')
         }
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
-    text = json.loads(response.text)
-    
-    if not response.ok:
-        return (f"{category}: Keine Neuigkeiten.")
-    elif not 'articles' in text:
-        return (f"{category}: Keine Neuigkeiten.")
-    text = text['articles'][0]
-    return(f"{category}: {text['title']} ({text['author']}).")
+    if not all_news:
+        category = random.choice(category)
+        querystring = {"q":category,"lang":"de"}
 
+
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        text = json.loads(response.text)
+    
+        if not response.ok:
+            return (f"{category}: Keine Neuigkeiten.")
+        elif not 'articles' in text:
+            return (f"{category}: Keine Neuigkeiten.")
+        text = text['articles'][0]
+        return(f"{category}: {text['title']} ({text['author']}).")
+    
+    if all_news:
+        answer = "Hier sind die heutigen News: \n"
+        for cat in category:
+            time.sleep(0.7)
+            querystring = {"q":cat,"lang":"de"}
+            response = requests.request("GET", url, headers=headers, params=querystring)
+            text = json.loads(response.text)
+        
+            if not response.ok:
+                answer += f"{cat}: Keine Neuigkeiten.\n"
+                continue
+            elif not 'articles' in text:
+                answer += f"{cat}: Keine Neuigkeiten.\n"
+                continue
+            text = text['articles'][0]
+            if text['author'] is None:
+                text['author'] = "Unbekannt"
+            answer += f"{cat}: {text['title']} ({text['author']}).\n"
+        return answer
+    else:
+        return "Es ist etwas schiefgelaufen."
+
+    
 def get_motivational_quote():
     
     url = "https://motivational-quotes1.p.rapidapi.com/motivation"
