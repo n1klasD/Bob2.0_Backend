@@ -12,7 +12,7 @@ def movies():
         movie_rating = "Unbekannt"
     if movie_runtime is None:
         movie_runtime = "Unbekannt"
-    return "Heute kann ich dir diesen Film vorschlagen: " + movie_title +\
+    return "Heute kann ich dir diesen Film vorschlagen: " + movie_title + \
            "\nRating: " + movie_rating + "\nSpielzeit: " + movie_runtime
 
 
@@ -31,12 +31,21 @@ def series():
 @app.route("/football", methods=['POST'])
 def matches():
     data = request.get_json()
-    favourite_team, next_match_date, next_match_time, opposing_team = datasource.get_future_football_matches_by_team(data['footballClub'])
+    favourite_team, next_match_date, next_match_time, opposing_team = \
+        datasource.get_future_football_match_by_team(data['footballClub'])
     if favourite_team == next_match_time == next_match_time == opposing_team == -1:
         return "Für " + data['footballClub'] + " wurden leider keine geplanten Spiele gefunden."
-    return favourite_team + " spielt am " + next_match_date + " um " + next_match_time + " Uhr gegen " + opposing_team + "."
+    return favourite_team + " spielt am " + next_match_date + " um " + next_match_time + " Uhr gegen " + \
+        opposing_team + "."
+
+
+@app.route("/formulaOne", methods=['POST'])
+def races():
+    data = request.get_json()
+    race_name, circuit_name, race_date, race_time = datasource.get_future_race(next_year=False)
+    return "Als nächstes findet der " + race_name + " (" + circuit_name + ") am " + race_date + " um " + race_time + \
+           " Uhr statt."
 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8001, debug=True)
-
