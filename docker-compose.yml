@@ -7,6 +7,7 @@ services:
       - "80:8000"
     networks:
       - internal
+    restart: unless-stopped
   welcome:
     image: 1646552/welcome:latest
     container_name: "welcome"
@@ -14,6 +15,7 @@ services:
       - "8001:8001"
     networks:
       - internal
+    restart: unless-stopped
   entertainment:
     image: 1646552/entertainment:latest
     container_name: "entertainment"
@@ -21,6 +23,7 @@ services:
       - "8002:8002"
     networks:
       - internal
+    restart: unless-stopped
   finances:
     image: 1646552/finances:latest
     container_name: "finances"
@@ -28,6 +31,7 @@ services:
       - "8003:8003"
     networks:
       - internal
+    restart: unless-stopped
   journey:
     image: 1646552/journey:latest
     container_name: "journey"
@@ -35,6 +39,7 @@ services:
       - "8004:8004"
     networks:
       - internal
+    restart: unless-stopped
 networks:
   internal:
 
