@@ -37,7 +37,7 @@ def crypto():
     if balances_not_null:
         return "Deine Kryptos aktuell:\n" + "\n".join(balances_not_null)
 
-    return "Du hast aktuell keine Kryptos.\n"
+    return "Du hast aktuell keine Kryptowährungen.\n"
 
 
 @app.route("/favourites", methods=['POST'])

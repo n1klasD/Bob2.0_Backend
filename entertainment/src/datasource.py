@@ -3,12 +3,20 @@ import requests
 from datetime import date
 import xmltodict
 import json
+from dotenv import load_dotenv
+import os
 
-api_key = "k_lrzvv46m"
-x_auth_token = "65065e29253e4f5abdf58266f37ea73c"
+
+def get_API_Key(key):
+    BASEDIR = os.path.abspath(os.path.dirname(__file__))
+
+    load_dotenv(os.path.join(BASEDIR, '.env'))
+
+    return os.getenv(key)
 
 
 def get_metadata(movie_id):
+    api_key = get_API_Key("imdb_key")
     url = "https://imdb-api.com/API/Title/"+api_key+"/"+movie_id
     response = requests.get(url)
     movie_metadata = response.json()
@@ -16,6 +24,7 @@ def get_metadata(movie_id):
 
 
 def search_movie_by_genre(genres: list[str]):
+    api_key = get_API_Key("imdb_key")
     movies = []
     url = "https://imdb-api.com/API/AdvancedSearch/"+api_key+"/?genres="
     for genre in genres:
@@ -45,6 +54,7 @@ def search_movie_by_genre(genres: list[str]):
 
 
 def search_series_by_genre(genres: list[str]):
+    api_key = get_API_Key("imdb_key")
     series_list = []
     url = "https://imdb-api.com/API/AdvancedSearch/"+api_key+"/?genres="
     for genre in genres:
@@ -113,6 +123,7 @@ def get_team_id(teams_list, team):
 
 
 def get_bundesliga():
+    x_auth_token = get_API_Key("x_auth_token")
     url = "https://api.football-data.org/v2/competitions/2002/teams"
     headers = {
         'X-Auth-Token': x_auth_token
@@ -135,7 +146,7 @@ def convert_datetime(next_match_datetime):
     return date, time
 
 
-def get_future_race(next_year):
+def get_future_race(next_year=False):
     current_date = date.today()
     current_year = current_date.year
     url = "http://ergast.com/api/f1/"
