@@ -10,10 +10,10 @@ def __init__(self) -> None:
     self.tkapikey = "9775658e-0a17-f909-9013-dd795e16e340"
     self.home = "Etzelstr."
 
-def get_Gas_Stations_Rad(self, city):
+def get_Gas_Stations_Rad(city):
     url = "https://creativecommons.tankerkoenig.de/json/list.php?"
     apikey = "9775658e-0a17-f909-9013-dd795e16e340"
-    lat, lng  = self.getCoords(city)
+    lat, lng  = getCoords(city)
     querystring = {"lat": lat, "lng":lng, "rad":"2", "type":"all", "apikey":"9775658e-0a17-f909-9013-dd795e16e340"} 
     headers = {
         "TK-API-Host": "creativecommons.tankerkoenig.de",
@@ -43,12 +43,12 @@ def get_weather_data(self):
     # return f"Heute wird es im Durchschnitt {str(text['list'][0]['temp']['average'])} Grad"
     return f"Heute wird es im Durchschnitt {str(text)} Grad"
 
-def get_Route(self, origin, destination):
+def get_Route(origin, destination):
     url = "https://api.mapbox.com/directions/v5/mapbox/driving/"
     accesstoken = "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
 
-    origin_lat, origin_lng = self.getCoords(origin)
-    destination_lat, destination_lng = self.getCoords(destination)
+    origin_lat, origin_lng = getCoords(origin)
+    destination_lat, destination_lng = getCoords(destination)
 
     url += str(origin_lng) + "," + str(origin_lat) + ";" + str(destination_lng) + "," + str(destination_lat)
 
@@ -63,16 +63,16 @@ def get_Route(self, origin, destination):
     response = "Ich habe folgende Route für dich:\n"
     for i in data['routes'][0]['legs'][0]['steps']:
         for j in i['voiceInstructions']:
-            respone += j['announcement']
+            response += j['announcement']
 
     return response
 
-def get_Distance(self, origin, destination):
+def get_Distance(origin, destination):
     url = "https://api.mapbox.com/directions/v5/mapbox/driving/"
     accesstoken = "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
 
-    origin_lat, origin_lng = self.getCoords(origin)
-    destination_lat, destination_lng = self.getCoords(destination)
+    origin_lat, origin_lng = getCoords(origin)
+    destination_lat, destination_lng = getCoords(destination)
 
     url += str(origin_lng) + "," + str(origin_lat) + ";" + str(destination_lng) + "," + str(destination_lat)
 
