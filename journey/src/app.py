@@ -1,12 +1,31 @@
-from flask import Flask
+from crypt import methods
+from flask import Flask, request
+from .datasources import get_Gas_Stations_Rad, get_Distance, get_Route
 
 app = Flask(__name__)
 
-@app.route('/')
+home = "homeLocation"
+work = "workingLocation"
+sprit = "gasolineType"
 
-def hello():
+@app.route('/')
+def index():
     return "Hello from journey dialog"
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+@app.route('/gasStations', methods=["POST"])
+def gasStations():
+    data = request.get_json()
+    stations = get_Gas_Stations_Rad(data[home])
+    return stations
 
+@app.route('/distance', methods=["POST"])
+def getdistance():
+    data = request.get_json()
+    distances = get_Distance(data[home], data[work])
+    return distances
+
+@app.router('/route', methods=["POST"])
+def get_Route():
+    data = request.get_json()
+    route = get_Route(data[home], data[work])
+    return route

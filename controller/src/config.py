@@ -68,6 +68,26 @@ usecases = [
                 example_questions=["Was passiert auf dem NFT Markt?"]
             )
         ]
+    ),
+    Usecase(
+        name="journey",
+        questions=[
+            Question(
+                route="/gasStations",
+                keywords=["Tankstelle", "Tanken"], 
+                example_questions=["Wo kann ich hier tanken?"]
+            ),
+            Question(
+                route="/distance",
+                keywords=["Weit", "Entfernung", "Weg", "entfernt"],
+                example_questions=["Wie weit ist meine Arbeit weg?", "Wie weit ist meine Arbeit entfernt?"]
+            ),
+            Question(
+                route="/route",
+                keywords=["Route", "Strecke", "Wegbeschreibung"],
+                example_questions=["Gib mir die Wegbeschreibung zu meiner Arbeit.", "Wie ist die Route zu meiner Arbeit?"]
+            )
+        ]
     )
 ]
 
