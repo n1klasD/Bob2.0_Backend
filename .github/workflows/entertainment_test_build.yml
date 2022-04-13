@@ -40,7 +40,7 @@ jobs:
           envkey_X_AUTH_TOKEN: ${{ secrets.X_AUTH_TOKEN }}
           directory: entertainment/src
           file_name: .env
-          fail_on_empty: false
+          fail_on_empty: true
       - name: Run tests
         run: |
           pytest entertainment/tests
