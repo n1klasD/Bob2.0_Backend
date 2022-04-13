@@ -39,10 +39,10 @@ def get_Gas_Stations_Rad(city, fuell):
     
     if len(data['stations']) < 3:
         for i in data['stations']:
-            response += "\n" + i['name'] + ", " + i['street'].title() + " " + i['houseNumber'] + "\nPreis: " + str(i['price']) + " €"
+            response += "\n" + i['name'] + ", " + i['street'].title() + " " + i['houseNumber'] + ".\nPreis: " + str(i['price']) + " €"
     else:
         for i in data['stations'][:3]:
-            response += "\n" + i['name'] + ", " + i['street'].title() + " " + i['houseNumber'] + "\nPreis: " + str(i['price']) + " €"
+            response += "\n" + i['name'] + ", " + i['street'].title() + " " + i['houseNumber'] + ".\nPreis: " + str(i['price']) + " €"
     return response
 
 
