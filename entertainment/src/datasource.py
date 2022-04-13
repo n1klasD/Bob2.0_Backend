@@ -4,7 +4,7 @@ from datetime import date
 import xmltodict
 import json
 
-api_key = "k_lrzvv46m"
+api_key = "k_1d6ggdo7"
 x_auth_token = "65065e29253e4f5abdf58266f37ea73c"
 
 
@@ -178,5 +178,4 @@ def get_joke():
         return setup+"\n"+delivery
     return "No joke found"
 
-print(get_future_race())
 
