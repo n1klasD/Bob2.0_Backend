@@ -33,13 +33,14 @@ def crypto():
         if float(balance["free"]) != 0:
             try:
                 _, value, _ = datasources.get_ticker_info(balance["asset"] + "-usd")
+                value.replace(".", ",")
             except Exception as e:
                 print(e)
                 value = "???"
             balances_not_null.append(f"[+] {balance['asset'].strip()}: {value}$")
 
     if balances_not_null:
-        return "Deine Kryptos aktuell:" + "\n".join(balances_not_null)
+        return "Deine Kryptos aktuell:\n" + "\n".join(balances_not_null)
 
     return "Du hast aktuell keine Kryptowährungen.\n"
 
