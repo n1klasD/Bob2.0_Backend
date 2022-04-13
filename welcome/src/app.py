@@ -29,14 +29,13 @@ def briefing():
     return f"Guten Morgen {data[userName]}.\
     {weather}\
     {stundenplan}\
-    Was du vielleicht verpasst hast: {get_news_data(data[newscats])}\
-    Und vergiss nicht: {get_motivational_quote()}"
+    Was du vielleicht verpasst hast: {get_news_data(data[newscats])} Und vergiss nicht: {get_motivational_quote()}."
 
 
 @app.route('/wetter', methods=["POST"])
 def weather():
     data = request.get_json()
-    weather = get_weather_data(data[city])
+    weather = get_weather_data(data[city], True)
     return weather
 
 @app.route('/termine', methods=["POST"])
