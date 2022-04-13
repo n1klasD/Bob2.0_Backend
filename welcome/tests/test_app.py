@@ -4,7 +4,7 @@ import pytest
 from mock import patch, Mock
 from flask import request
 
-from ..src import app as flask_app, weather,briefing, index, timetable
+from ..src import app as flask_app, weather, briefing, index, timetable
 from ..src import datasources
 
 
