@@ -102,14 +102,14 @@ def get_Route(origin, destination, vehicle):
         "MB-Access-Token": "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
     }
 
-    querystring = {"geometries": "geojson", "access_token": accesstoken, "steps":"true", "language":"de", "voice_instructions":"true"}
+    querystring = {"geometries": "geojson", "access_token": accesstoken, "steps":"true", "language":"de", "voice_units":"metric", "voice_instructions":"true"}
 
     data = requests.request("GET", url, headers=headers, params=querystring)
     data = json.load(io.BytesIO(data.content.replace(b"'", b'"')))
     response = "Ich habe folgende Route für dich:\n"
     for i in data['routes'][0]['legs'][0]['steps']:
         for j in i['voiceInstructions']:
-            response += j['announcement']
+            response += j['announcement'] + "\n"
 
     return response
 
@@ -134,7 +134,7 @@ def get_Distance(origin, destination, vehicle):
 
     data = json.load(io.BytesIO(requests.request("GET", url, headers=headers, params=querystring).content.replace(b"'", b'"')))
 
-    response = "Dein Ziel ist " + str(timedelta(seconds=(data['routes'][0]['legs'][0]["duration"]))).split(".")[0] + " Stunden und " + str(data['routes'][0]['legs'][0]["distance"]/1000) + " Km entfernt."
+    response = "Dein Ziel " + destination + " ist " + str(timedelta(seconds=(data['routes'][0]['legs'][0]["duration"]))).split(".")[0] + " Stunden und " + str(round(data['routes'][0]['legs'][0]["distance"]/1000, 1)) + " Km entfernt."
     return response
 
 def get_Bahn(self):
