@@ -33,7 +33,6 @@ def crypto():
         if float(balance["free"]) != 0:
             try:
                 _, value, _ = datasources.get_ticker_info(balance["asset"].strip() + "-usd")
-                value.replace(".", ",")
             except Exception as e:
                 print(e)
                 value = "???"
@@ -96,7 +95,7 @@ def nft():
         return "NFT Informationen können gerade nicht abgerufen werden.\n"
 
 
-@app.route("/info/<ticker>")
+@app.route("/info/<ticker>", methods=["POST"])
 def ticker_info(ticker):
     try:
         name, value, currency = datasources.get_ticker_info(ticker)
