@@ -23,7 +23,7 @@ def get_metadata(movie_id):
     return movie_metadata
 
 
-def search_movie_by_genre(genres: list[str]):
+def search_movie_by_genre(genres):
     api_key = get_API_Key("IMDB_KEY")
     movies = []
     url = "https://imdb-api.com/API/AdvancedSearch/"+api_key+"/?genres="
@@ -53,7 +53,7 @@ def search_movie_by_genre(genres: list[str]):
         return None, None, None
 
 
-def search_series_by_genre(genres: list[str]):
+def search_series_by_genre(genres):
     api_key = get_API_Key("IMDB_KEY")
     series_list = []
     url = "https://imdb-api.com/API/AdvancedSearch/"+api_key+"/?genres="
