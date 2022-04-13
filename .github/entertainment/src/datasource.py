@@ -4,7 +4,7 @@ from datetime import date
 import xmltodict
 import json
 
-api_key = "k_qhn64207"
+api_key = "k_nblvo64n"
 x_auth_token = "65065e29253e4f5abdf58266f37ea73c"
 
 
@@ -26,19 +26,22 @@ def search_movie_by_genre(genres: list[str]):
     results = data['results']
     for result in results:
         movies.append(result)
-    movie_found = False
-    while not movie_found:
-        random_index = random.randint(0, len(movies) - 1)
-        movie = movies[random_index]
-        movie_id = movie['id']
-        movie_metadata = get_metadata(movie_id)
-        if movie_metadata['type'] == "Movie":
-            movie_found = True
-    movie_title = movie_metadata['title']
-    movie_runtime = movie_metadata['runtimeStr']
-    movie_rating = movie_metadata['imDbRating']
+    if len(movies) > 0:
+        movie_found = False
+        while not movie_found:
+            random_index = random.randint(0, len(movies) - 1)
+            movie = movies[random_index]
+            movie_id = movie['id']
+            movie_metadata = get_metadata(movie_id)
+            if movie_metadata['type'] == "Movie":
+                movie_found = True
+        movie_title = movie_metadata['title']
+        movie_runtime = movie_metadata['runtimeStr']
+        movie_rating = movie_metadata['imDbRating']
 
-    return movie_title, movie_runtime, movie_rating
+        return movie_title, movie_runtime, movie_rating
+    else:
+        return None, None, None
 
 
 def search_series_by_genre(genres: list[str]):
@@ -52,19 +55,22 @@ def search_series_by_genre(genres: list[str]):
     results = data['results']
     for result in results:
         series_list.append(result)
-    series_found = False
-    while not series_found:
-        random_index = random.randint(0, len(series_list) - 1)
-        series = series_list[random_index]
-        series_id = series['id']
-        series_metadata = get_metadata(series_id)
-        if series_metadata['type'] == "TVSeries":
-            series_found = True
-    series_title = series_metadata['title']
-    series_runtime = series_metadata['runtimeStr']
-    series_rating = series_metadata['imDbRating']
+    if len(series_list) > 0:
+        series_found = False
+        while not series_found:
+            random_index = random.randint(0, len(series_list) - 1)
+            series = series_list[random_index]
+            series_id = series['id']
+            series_metadata = get_metadata(series_id)
+            if series_metadata['type'] == "TVSeries":
+                series_found = True
+        series_title = series_metadata['title']
+        series_runtime = series_metadata['runtimeStr']
+        series_rating = series_metadata['imDbRating']
 
-    return series_title, series_runtime, series_rating
+        return series_title, series_runtime, series_rating
+    else:
+        return None, None, None
 
 
 def get_future_football_match_by_team(favourite_team: str):

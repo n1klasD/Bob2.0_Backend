@@ -6,3 +6,4 @@ pytest-cov
 bs4~=0.0.1
 beautifulsoup4~=4.11.1
 python-dotenv~=0.20.0
+xmltodict~=0.12.0
