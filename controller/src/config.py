@@ -79,7 +79,7 @@ usecases = [
             ),
             Question(
                 route="/distance",
-                keywords=["Weit", "Entfernung", "Weg", "entfernt", "lange"],
+                keywords=["Weit", "Entfernung", "entfernt", "lange"],
                 example_questions=["Wie weit ist meine Arbeit weg?", "Wie lange brauche ich zur Arbeit?"]
             ),
             Question(
