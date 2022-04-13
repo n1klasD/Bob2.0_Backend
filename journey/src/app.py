@@ -7,6 +7,8 @@ app = Flask(__name__)
 home = "homeLocation"
 work = "workingLocation"
 fuel = "gasolineType"
+vehicle = "preferedVehicle"
+
 
 @app.route('/')
 def index():
@@ -15,7 +17,9 @@ def index():
 @app.route('/gasStations', methods=["POST"])
 def gasStations():
     data = request.get_json()
-    if(data[fuel] == "Benzin"):
+    if(data[fuel] == "Super E10"):
+        data[fuel] = "e10"
+    if(data[fuel] == "Super"):
         data[fuel] = "e5"
     if(data[fuel] == "Diesel"):
         data[fuel] = "diesel"
@@ -25,12 +29,12 @@ def gasStations():
 @app.route('/distance', methods=["POST"])
 def getdistance():
     data = request.get_json()
-    distances = get_Distance(data[home], data[work])
+    distances = get_Distance(data[home], data[work], data[vehicle])
     return distances
 
 @app.route('/route', methods=["POST"])
 def getRoute():
     data = request.get_json()
     weather = get_weather_data(data[home])
-    route = get_Route(data[home], data[work])
+    route = get_Route(data[home], data[work], data[vehicle])
     return weather + "\n" + route

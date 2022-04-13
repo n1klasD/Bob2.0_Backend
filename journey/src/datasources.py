@@ -23,6 +23,8 @@ def get_Gas_Stations_Rad(city, fuel):
         "TK-API-Key": "9775658e-0a17-f909-9013-dd795e16e340"
     }
     data = requests.request("GET", url, headers=headers, params=querystring)
+    if not data.ok:
+        return "Keine valide Spritsorte ausgewählt"
     data = json.load(io.BytesIO(data.content.replace(b"'", b'"')))
     response = "Hier die nächsten Tankstellen in dieser Stadt:"
     if(len(data['stations'])<3):
@@ -74,8 +76,17 @@ def get_weather_data(city):
     # return f"Heute wird es im Durchschnitt {str(text['list'][0]['temp']['average'])} Grad"
     return f"Heute wird es in {str(text['city']['name'])} im Durchschnitt {str(today['temp']['average'])} Grad mit {humidity} Luftfeuchtigkeit. {clothing}"
 
-def get_Route(origin, destination):
-    url = "https://api.mapbox.com/directions/v5/mapbox/driving/"
+def getmapurl(vehicle):
+    switcher = {
+        "Auto": "https://api.mapbox.com/directions/v5/mapbox/driving/",
+        "Fahrrad": "https://api.mapbox.com/directions/v5/mapbox/cycling/",
+        "Gehen": "https://api.mapbox.com/directions/v5/mapbox/walking/"
+    }
+    return switcher[vehicle]
+
+def get_Route(origin, destination, vehicle):
+
+    url = getmapurl(vehicle)
     accesstoken = "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
 
     if not getCoords(origin) or not getCoords(destination):
@@ -102,8 +113,8 @@ def get_Route(origin, destination):
 
     return response
 
-def get_Distance(origin, destination):
-    url = "https://api.mapbox.com/directions/v5/mapbox/driving/"
+def get_Distance(origin, destination, vehicle):
+    url = getmapurl(vehicle)
     accesstoken = "pk.eyJ1IjoiYWxleGhvYmRlbiIsImEiOiJjbDF3czlqaWswbTdmM2ltcDBlemlzMG91In0.IRDjSyBm9HPJvLgypn31bA"
 
     if not getCoords(origin) or not getCoords(destination):
