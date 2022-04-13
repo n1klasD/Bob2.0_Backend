@@ -36,7 +36,7 @@ def get_news_data(category):
     elif not 'articles' in text:
         return (f"{category}: Keine Neuigkeiten.")
     text = text['articles'][0]
-    return(f"{category}: {text['title']} (von {text['author']},{text['published_date']}) Hier weiterlesen: {text['link']}")
+    return(f"{category}: {text['title']} ({text['author']}).")
 
 def get_motivational_quote():
     
