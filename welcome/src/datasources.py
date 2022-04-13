@@ -36,6 +36,9 @@ def get_news_data(category,all_news=False):
         elif not 'articles' in text:
             return (f"{category}: Keine Neuigkeiten.")
         text = text['articles'][0]
+        if text['author'] is None:
+                text['author'] = "Unbekannt"
+                
         return(f"{category}: {text['title']} ({text['author']}).")
     
     if all_news:
