@@ -17,12 +17,6 @@ def index():
 @app.route('/gasStations', methods=["POST"])
 def gasStations():
     data = request.get_json()
-    if(data[fuel] == "Super E10"):
-        data[fuel] = "e10"
-    if(data[fuel] == "Super"):
-        data[fuel] = "e5"
-    if(data[fuel] == "Diesel"):
-        data[fuel] = "diesel"
     stations = get_Gas_Stations_Rad(data[home], data[fuel])
     return stations
 
