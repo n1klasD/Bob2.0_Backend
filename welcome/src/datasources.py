@@ -54,7 +54,9 @@ def get_motivational_quote():
     }
 
     response = requests.request("POST", url, json=payload, headers=headers)
-    return response.text.strip("\n")
+    if not response.ok:
+        return ""
+    return response.text.replace("\n", "")
 
 
 def get_weather_data(city):
@@ -142,7 +144,7 @@ def get_rapla_data(key):
         if "Personen:" in info:
             person += " bei " + info[info.index("Personen:") + 1]
 
-        answer += time[2][:11] + " : " + course + person[:-1] + "\n"
+        answer += time[2][:11] + " : " + course + person[:-1] + ". "
     if answer == "Heute hast du diese Vorlesungen: ":
         return "Heute hast du keine Vorlesungen."
     return answer
