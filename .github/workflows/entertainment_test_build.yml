@@ -33,6 +33,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
           if [ -f entertainment/src/requirements.txt ]; then pip install -r entertainment/src/requirements.txt; fi
+      - name: Inject environment file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_imdb_key: ${{ secrets.IMDB_KEY }}
+          envkey_x_auth_token: ${{ secrets.X_AUTH_TOKEN }}
+          directory: entertainment/src
+          file_name: .env
+          fail_on_empty: false
       - name: Run tests
         run: |
           pytest entertainment/tests
