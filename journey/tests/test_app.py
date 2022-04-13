@@ -22,7 +22,7 @@ def test_bad_distance():
         answer = getdistance()
         assert "Mindestens eine der Angaben ist kein valider Ort" in answer
 
-def test_bad_route():
+def test_good_route():
     with flask_app.test_client() as c:
         home = "Hochdahl"
         work = "Ratingen"
