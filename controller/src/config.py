@@ -45,27 +45,27 @@ usecases = [
             Question(
                 route="/crypto",
                 keywords=["krypto", "crypto", "wallet", "coin"],
-                example_questions=["Wie stehen meine Kryptowährungen?"]
+                example_questions=["Wie stehen meine Kryptowährungen?", "Wie sieht es in meinem Wallet aus?"]
             ),
             Question(
                 route="/favourites",
                 keywords=["favoriten", "aktien", "portfolio"],
-                example_questions=["Wie stehen meine Aktien?"]
+                example_questions=["Wie stehen meine Aktien?", "Zeig mir mein Portfolio!"]
             ),
             Question(
                 route="/leading",
-                keywords=["index", "dax"],
+                keywords=["index"],
                 example_questions=["Wie steht mein favorisierter Leitindex?"]
             ),
             Question(
                 route="/wallstreetbets",
-                keywords=["wallstreetbets", "trend", "reddit", "Stimmung", "GME"],
-                example_questions=["Wie ist die Stimmung auf Reddit?"]
+                keywords=["wallstreetbets", "trend", "reddit", "Stimmung", "GME", "Gamestop"],
+                example_questions=["Wie ist die Stimmung auf Reddit?", "Ist Gamestop noch angesagt?"]
             ),
             Question(
                 route="/nft",
                 keywords=["nft"],
-                example_questions=["Was passiert auf dem NFT Markt?"]
+                example_questions=["Was passiert auf dem NFT Markt?", "Welches NFT wurde zuletzt verkauft?"]
             )
         ]
     ),
@@ -74,18 +74,19 @@ usecases = [
         questions=[
             Question(
                 route="/gasStations",
-                keywords=["Tankstelle", "Tanken"], 
-                example_questions=["Wo kann ich hier tanken?"]
+                keywords=["Tankstelle", "Tanken"],
+                example_questions=["Wo kann ich hier tanken?", "Wo ist die nächste Tankstelle?"]
             ),
             Question(
                 route="/distance",
-                keywords=["Weit", "Entfernung", "Weg", "entfernt"],
-                example_questions=["Wie weit ist meine Arbeit weg?", "Wie weit ist meine Arbeit entfernt?"]
+                keywords=["Weit", "Entfernung", "Weg", "entfernt", "lange"],
+                example_questions=["Wie weit ist meine Arbeit weg?", "Wie lange brauche ich zur Arbeit?"]
             ),
             Question(
                 route="/route",
                 keywords=["Route", "Strecke", "Wegbeschreibung"],
-                example_questions=["Gib mir die Wegbeschreibung zu meiner Arbeit.", "Wie ist die Route zu meiner Arbeit?"]
+                example_questions=["Gib mir die Wegbeschreibung zu meiner Arbeit.",
+                                   "Wie ist die Route zu meiner Arbeit?"]
             )
         ]
     ),
@@ -122,9 +123,8 @@ usecases = [
                 keywords=["Witz", "lustig", "funny", "joke", "lach"],
                 example_questions=["Erzähle mir einen Witz", "Sag etwas lustiges", "Bringe mich zum Lachen"]
             )
-
-    ]
-)
+        ]
+    )
 ]
 
 no_answer = [
